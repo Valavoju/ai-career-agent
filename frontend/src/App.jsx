@@ -1,12 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
+
+import Hero from "./components/Hero";
+import UploadSection from "./components/UploadSection";
+import ScoreCard from "./components/ScoreCard";
+import SkillsCard from "./components/SkillsCard";
+import VerdictCard from "./components/VerdictCard";
+import RoadmapCard from "./components/RoadmapCard";
+
 import "./App.css";
 
 function App() {
   const [file, setFile] = useState(null);
   const [role, setRole] = useState("AI Engineer");
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
 
   const roles = [
     "AI Engineer",
@@ -21,87 +29,100 @@ function App() {
     "Cyber Security Analyst",
     "Java Developer",
     "Python Developer",
-    "React Developer"
+    "React Developer",
   ];
 
   const analyzeResume = async () => {
     if (!file) {
-      alert("Please upload a resume");
+      alert("Please upload your resume");
       return;
     }
 
-    setLoading(true);
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("role", role);
-
     try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("role", role);
+
       const response = await axios.post(
         "https://ai-career-agent-yord.onrender.com/analyze",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       setResult(response.data);
+
+      console.log(response.data);
     } catch (error) {
-  console.log("FULL ERROR:", error);
-  console.log("RESPONSE:", error.response);
-  console.log("DATA:", error.response?.data);
+      console.error(error);
 
-  alert(
-    JSON.stringify(
-      error.response?.data || error.message,
-      null,
-      2
-    )
-  );
-}
-
-    setLoading(false);
+      if (error.response) {
+        alert(`Backend Error: ${error.response.status}`);
+      } else {
+        alert("Network Error");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container">
-      <h1>AI Career Research Agent</h1>
+    <div className="app">
+      <Hero />
 
-      <input
-        type="file"
-        onChange={(e) => setFile(e.target.files[0])}
+      <UploadSection
+        file={file}
+        setFile={setFile}
+        role={role}
+        setRole={setRole}
+        roles={roles}
+        analyzeResume={analyzeResume}
+        loading={loading}
       />
 
-      <select
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-      >
-        {roles.map((r) => (
-          <option key={r}>{r}</option>
-        ))}
-      </select>
-
-      <button onClick={analyzeResume}>
-        {loading ? "Analyzing..." : "Analyze Resume"}
-      </button>
-
       {result && (
-        <div className="result">
-          <h2>Match Score: {result.match_score}%</h2>
+        <div className="results-container">
+          <div className="result-card">
+            <h2>🎯 Match Score</h2>
+            <h1>{result.match_score}%</h1>
+          </div>
 
-          <h3>Matching Skills</h3>
-          <ul>
-            {result.matching_skills?.map((skill) => (
-              <li key={skill}>{skill}</li>
-            ))}
-          </ul>
+          <div className="result-card">
+            <h2>✅ Matching Skills</h2>
 
-          <h3>Missing Skills</h3>
-          <ul>
-            {result.missing_skills?.map((skill) => (
-              <li key={skill}>{skill}</li>
-            ))}
-          </ul>
+            <div className="skills">
+              {result.matching_skills?.map((skill, index) => (
+                <span key={index} className="skill-chip success">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
 
-          <h3>Roadmap</h3>
-          <p>{result.roadmap}</p>
+          <div className="result-card">
+            <h2>❌ Missing Skills</h2>
+
+            <div className="skills">
+              {result.missing_skills?.map((skill, index) => (
+                <span key={index} className="skill-chip danger">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="result-card">
+            <h2>🧠 AI Roadmap</h2>
+
+            <div className="roadmap">
+              {result.roadmap}
+            </div>
+          </div>
         </div>
       )}
     </div>

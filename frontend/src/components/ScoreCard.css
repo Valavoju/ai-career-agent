@@ -1,0 +1,30 @@
+.score-card {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.circle {
+  width: 220px;
+  height: 220px;
+  margin: auto;
+
+  border-radius: 50%;
+
+  background:
+    conic-gradient(
+      #4f46e5 0deg,
+      #8b5cf6 280deg,
+      #1e293b 280deg
+    );
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow:
+    0 0 30px rgba(99,102,241,.5);
+}
+
+.circle h1 {
+  font-size: 3rem;
+}
