@@ -1,13 +1,18 @@
-import "./ScoreCard.css";
-
 function ScoreCard({ score }) {
   return (
-    <div className="score-card">
-      <div className="circle">
-        <h1>{score}%</h1>
+    <div className="result-card">
+
+      <h2>🎯 ATS Match Score</h2>
+
+      <div
+        className="score-circle"
+        style={{ "--score": score }}
+      >
+        <div className="score-number">
+          {score}%
+        </div>
       </div>
 
-      <h2>ATS Match Score</h2>
     </div>
   );
 }

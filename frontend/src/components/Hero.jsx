@@ -4,14 +4,21 @@ function Hero() {
   return (
     <motion.div
       className="hero"
-      initial={{ opacity: 0, y: -30 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
     >
-      <h1>AI Career Research Agent</h1>
+      <h1>CareerPilot AI</h1>
+
       <p>
-        Upload your resume, discover skill gaps,
-        and get an AI-powered career roadmap.
+        Your Personal AI Career Strategist
       </p>
+
+      <div className="hero-features">
+        <span>✓ ATS Resume Analysis</span>
+        <span>✓ Skill Gap Detection</span>
+        <span>✓ AI Career Roadmap</span>
+        <span>✓ 13+ Job Roles</span>
+      </div>
     </motion.div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Hero from "./components/Hero";
@@ -7,6 +7,7 @@ import ScoreCard from "./components/ScoreCard";
 import SkillsCard from "./components/SkillsCard";
 import VerdictCard from "./components/VerdictCard";
 import RoadmapCard from "./components/RoadmapCard";
+import ResumeSummaryCard from "./components/ResumeSummaryCard";
 
 import "./App.css";
 
@@ -15,6 +16,12 @@ function App() {
   const [role, setRole] = useState("AI Engineer");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("https://ai-career-agent-yord.onrender.com/docs")
+      .catch(() => {});
+  }, []);
 
   const roles = [
     "AI Engineer",
@@ -42,6 +49,7 @@ function App() {
       setLoading(true);
 
       const formData = new FormData();
+
       formData.append("file", file);
       formData.append("role", role);
 
@@ -57,14 +65,17 @@ function App() {
 
       setResult(response.data);
 
-      console.log(response.data);
+      console.log("Backend Response:", response.data);
+
     } catch (error) {
       console.error(error);
 
       if (error.response) {
         alert(`Backend Error: ${error.response.status}`);
       } else {
-        alert("Network Error");
+        alert(
+          "Backend is waking up. Please wait 30-60 seconds and click Analyze again."
+        );
       }
     } finally {
       setLoading(false);
@@ -87,44 +98,44 @@ function App() {
 
       {result && (
         <div className="results-container">
-          <div className="result-card">
-            <h2>🎯 Match Score</h2>
-            <h1>{result.match_score}%</h1>
-          </div>
 
-          <div className="result-card">
-            <h2>✅ Matching Skills</h2>
+          <ScoreCard
+            score={result.match_score}
+          />
 
-            <div className="skills">
-              {result.matching_skills?.map((skill, index) => (
-                <span key={index} className="skill-chip success">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+          <ResumeSummaryCard
+            summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
+              result.matching_skills?.length || 0
+            } matching skills and need to improve ${
+              result.missing_skills?.length || 0
+            } important skills to become more competitive for the ${role} role.`}
+          />
 
-          <div className="result-card">
-            <h2>❌ Missing Skills</h2>
+          <VerdictCard
+            score={result.match_score}
+          />
 
-            <div className="skills">
-              {result.missing_skills?.map((skill, index) => (
-                <span key={index} className="skill-chip danger">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+          <SkillsCard
+            title="✅ Matching Skills"
+            skills={result.matching_skills || []}
+            color="green"
+          />
 
-          <div className="result-card">
-            <h2>🧠 AI Roadmap</h2>
+          <SkillsCard
+            title="❌ Missing Skills"
+            skills={result.missing_skills || []}
+            color="red"
+          />
 
-            <div className="roadmap">
-              {result.roadmap}
-            </div>
-          </div>
+          <RoadmapCard
+            roadmap={result.roadmap}
+          />
+
         </div>
       )}
+      <footer className="footer">
+  © 2026 CareerPilot AI • Built by Avinash
+</footer>
     </div>
   );
 }
