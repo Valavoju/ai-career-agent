@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 
 from resume_parser import extract_text
 from skill_extractor import extract_skills
@@ -7,6 +8,14 @@ from matcher import calculate_match
 from roadmap import generate_roadmap
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/analyze")
 async def analyze_resume(
