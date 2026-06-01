@@ -1,16 +1,32 @@
 def calculate_match(resume_skills, required_skills):
 
+    flattened_skills = []
+
+    for category in resume_skills:
+
+        if isinstance(category, dict):
+
+            skills = category.get("skills", [])
+
+            for skill in skills:
+                flattened_skills.append(skill)
+
+    resume_text = " ".join(flattened_skills).lower()
+
     matched = []
     missing = []
 
-    resume_text = " ".join(resume_skills).lower()
-
     for skill in required_skills:
 
-        words = skill.lower().split()
+        skill_text = skill.lower()
 
-        if any(word in resume_text for word in words):
+        if any(
+            resume_skill.lower() in skill_text
+            or skill_text in resume_skill.lower()
+            for resume_skill in flattened_skills
+        ):
             matched.append(skill)
+
         else:
             missing.append(skill)
 

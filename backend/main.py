@@ -6,6 +6,7 @@ from skill_extractor import extract_skills
 from role_analyzer import get_role_requirements
 from matcher import calculate_match
 from roadmap import generate_roadmap
+from advisor import get_hiring_recommendation
 
 app = FastAPI()
 
@@ -16,6 +17,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def health():
+    return {
+        "status": "alive"
+    }
 
 @app.post("/analyze")
 async def analyze_resume(
@@ -34,6 +41,12 @@ async def analyze_resume(
 
     role_analysis = get_role_requirements(role)
 
+    print("Resume Analysis:")
+    print(resume_analysis)
+
+    print("Skills:")
+    print(resume_analysis["skills"])
+
     result = calculate_match(
         resume_analysis["skills"],
         role_analysis["required_skills"]
@@ -44,7 +57,12 @@ async def analyze_resume(
         result["missing_skills"]
     )
 
+    recommendation = get_hiring_recommendation(
+        result["match_score"]
+    )
+
     return {
+
         "role": role,
 
         "resume_skills":
@@ -61,6 +79,12 @@ async def analyze_resume(
 
         "missing_skills":
             result["missing_skills"],
+
+        "recommendation":
+            recommendation["recommendation"],
+
+        "confidence":
+            recommendation["confidence"],
 
         "roadmap":
             roadmap
