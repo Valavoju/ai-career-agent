@@ -17,9 +17,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
+  // Wake up Render backend when app loads
   useEffect(() => {
     axios
-      .get("https://ai-career-agent-yord.onrender.com/docs")
+      .get("https://ai-career-agent-yord.onrender.com/")
       .catch(() => {});
   }, []);
 
@@ -71,10 +72,12 @@ function App() {
       console.error(error);
 
       if (error.response) {
-        alert(`Backend Error: ${error.response.status}`);
+        console.log(
+          `Backend Error: ${error.response.status}`
+        );
       } else {
-        alert(
-          "Backend is waking up. Please wait 30-60 seconds and click Analyze again."
+        console.log(
+          "Backend waking up..."
         );
       }
     } finally {
@@ -95,6 +98,17 @@ function App() {
         analyzeResume={analyzeResume}
         loading={loading}
       />
+
+      {loading && (
+        <div className="loading-card">
+          <h3>🤖 Connecting to Recruitment AI...</h3>
+
+          <p>
+            First request may take 20–30 seconds while
+            the backend wakes up.
+          </p>
+        </div>
+      )}
 
       {result && (
         <div className="results-container">
@@ -133,9 +147,10 @@ function App() {
 
         </div>
       )}
+
       <footer className="footer">
-  © 2026 CareerPilot AI • Built by Avinash
-</footer>
+        © 2026 CareerPilot AI • Built by Avinash
+      </footer>
     </div>
   );
 }

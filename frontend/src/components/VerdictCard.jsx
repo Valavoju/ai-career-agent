@@ -1,25 +1,40 @@
 function VerdictCard({ score }) {
 
   let verdict = "";
+  let confidence = "";
 
-  if(score >= 80){
-    verdict = "🚀 Job Ready";
+  if(score >= 75){
+    verdict = "Strong Hire";
+    confidence = "95%";
   }
 
-  else if(score >= 60){
-    verdict = "⚡ Almost Ready";
+  else if(score >= 55){
+    verdict = "Hire";
+    confidence = "85%";
+  }
+
+  else if(score >= 30){
+    verdict = "Borderline";
+    confidence = "75%";
   }
 
   else{
-    verdict = "📚 Need Upskilling";
+    verdict = "Needs Upskilling";
+    confidence = "70%";
   }
 
   return (
-    <div className="result-card">
+    <div className="dashboard-card">
 
-      <h2>🤖 AI Verdict</h2>
+      <h2>🤖 Hiring Recommendation</h2>
 
-      <p>{verdict}</p>
+      <h1 className="verdict-title">
+        {verdict}
+      </h1>
+
+      <p className="confidence">
+        Confidence: {confidence}
+      </p>
 
     </div>
   );

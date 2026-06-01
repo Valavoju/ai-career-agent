@@ -1,11 +1,13 @@
 function ResumeSummaryCard({ summary }) {
   return (
-    <div className="result-card">
-      <h2>📄 Resume Summary</h2>
+    <div className="dashboard-card">
 
-      <div className="roadmap">
+      <h2>📄 Candidate Summary</h2>
+
+      <p className="summary-text">
         {summary}
-      </div>
+      </p>
+
     </div>
   );
 }
