@@ -6,18 +6,26 @@ function Hero() {
       className="hero"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
     >
-      <h1>CareerPilot AI</h1>
+      <h1>AI Recruitment Gen Agents</h1>
 
       <p>
-        Your Personal AI Career Strategist
+        Multi-Agent Recruitment Intelligence Platform
       </p>
 
       <div className="hero-features">
-        <span>✓ ATS Resume Analysis</span>
-        <span>✓ Skill Gap Detection</span>
-        <span>✓ AI Career Roadmap</span>
-        <span>✓ 13+ Job Roles</span>
+
+        <span>📄 Resume Screening Agent</span>
+
+        <span>🧠 Skill Evaluation Agent</span>
+
+        <span>📅 Interview Scheduling Agent</span>
+
+        <span>🤖 Hiring Recommendation Agent</span>
+
+        <span>📧 Candidate Communication Agent</span>
+
       </div>
     </motion.div>
   );

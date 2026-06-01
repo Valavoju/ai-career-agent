@@ -1,27 +1,24 @@
 function SkillsCard({ title, skills, color }) {
-
   return (
-    <div className="dashboard-card">
-
+    <div className="dashboard-card skills-card">
       <h2>{title}</h2>
 
-      <div className="skills-grid">
-
-        {skills.length === 0 ? (
-          <p>No skills found</p>
-        ) : (
-          skills.map((skill) => (
+      {skills.length === 0 ? (
+        <div className="empty-state">
+          No skills found
+        </div>
+      ) : (
+        <div className="skills-grid">
+          {skills.map((skill, index) => (
             <span
-              key={skill}
+              key={index}
               className={`skill-chip ${color}`}
             >
               {skill}
             </span>
-          ))
-        )}
-
-      </div>
-
+          ))}
+        </div>
+      )}
     </div>
   );
 }

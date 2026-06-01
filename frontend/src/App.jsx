@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import Hero from "./components/Hero";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
+
 import UploadSection from "./components/UploadSection";
 import ScoreCard from "./components/ScoreCard";
 import SkillsCard from "./components/SkillsCard";
 import VerdictCard from "./components/VerdictCard";
 import RoadmapCard from "./components/RoadmapCard";
 import ResumeSummaryCard from "./components/ResumeSummaryCard";
+
+import CommunicationCard from "./components/CommunicationCard";
+import InterviewCard from "./components/InterviewCard";
 
 import "./App.css";
 
@@ -17,7 +22,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  // Wake up Render backend when app loads
   useEffect(() => {
     axios
       .get("https://ai-career-agent-yord.onrender.com/")
@@ -72,12 +76,10 @@ function App() {
       console.error(error);
 
       if (error.response) {
-        console.log(
-          `Backend Error: ${error.response.status}`
-        );
+        alert(`Backend Error: ${error.response.status}`);
       } else {
-        console.log(
-          "Backend waking up..."
+        alert(
+          "Backend is waking up. Please wait 20-30 seconds and try again."
         );
       }
     } finally {
@@ -86,71 +88,89 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <Hero />
+    <div className="dashboard-layout">
 
-      <UploadSection
-        file={file}
-        setFile={setFile}
-        role={role}
-        setRole={setRole}
-        roles={roles}
-        analyzeResume={analyzeResume}
-        loading={loading}
-      />
+      <Sidebar />
 
-      {loading && (
-        <div className="loading-card">
-          <h3>🤖 Connecting to Recruitment AI...</h3>
+      <div className="main-content">
 
-          <p>
-            First request may take 20–30 seconds while
-            the backend wakes up.
-          </p>
-        </div>
-      )}
+        <Navbar />
 
-      {result && (
-        <div className="results-container">
+        <UploadSection
+          file={file}
+          setFile={setFile}
+          role={role}
+          setRole={setRole}
+          roles={roles}
+          analyzeResume={analyzeResume}
+          loading={loading}
+        />
 
-          <ScoreCard
-            score={result.match_score}
-          />
+        {loading && (
+          <div className="loading-card">
+            <h3>🤖 Recruitment AI Processing...</h3>
 
-          <ResumeSummaryCard
-            summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
-              result.matching_skills?.length || 0
-            } matching skills and need to improve ${
-              result.missing_skills?.length || 0
-            } important skills to become more competitive for the ${role} role.`}
-          />
+            <p>
+              Resume screening, skill evaluation,
+              hiring recommendation and interview
+              scheduling are running...
+            </p>
+          </div>
+        )}
 
-          <VerdictCard
-            score={result.match_score}
-          />
+        {result && (
+          <div className="results-container">
 
-          <SkillsCard
-            title="✅ Matching Skills"
-            skills={result.matching_skills || []}
-            color="green"
-          />
+            <div className="top-grid">
 
-          <SkillsCard
-            title="❌ Missing Skills"
-            skills={result.missing_skills || []}
-            color="red"
-          />
+              <ScoreCard
+                score={result.match_score}
+              />
 
-          <RoadmapCard
-            roadmap={result.roadmap}
-          />
+              <VerdictCard
+  recommendation={result.recommendation}
+  confidence={result.confidence}
+/>
 
-        </div>
-      )}
+            </div>
 
-      <footer className="footer">
-        © 2026 CareerPilot AI • Built by Avinash
-      </footer>
+            <ResumeSummaryCard
+              summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
+                result.matching_skills?.length || 0
+              } matching skills and need to improve ${
+                result.missing_skills?.length || 0
+              } important skills to become more competitive for the ${role} role.`}
+            />
+
+            <SkillsCard
+              title="✅ Matching Skills"
+              skills={result.matching_skills || []}
+              color="green"
+            />
+
+            <SkillsCard
+              title="❌ Missing Skills"
+              skills={result.missing_skills || []}
+              color="red"
+            />
+
+            <CommunicationCard
+              email={result.communication_email}
+            />
+
+            <InterviewCard
+              slots={result.interview_slots}
+            />
+
+            <RoadmapCard
+              roadmap={result.roadmap}
+            />
+
+          </div>
+        )}
+
+      </div>
+
     </div>
   );
 }

@@ -2,12 +2,12 @@ import ReactMarkdown from "react-markdown";
 
 function RoadmapCard({ roadmap }) {
   return (
-    <div className="result-card">
-      <h2>🧠 AI Roadmap</h2>
+    <div className="dashboard-card roadmap-card">
+      <h2>🧠 Learning Roadmap Agent</h2>
 
-      <ReactMarkdown>
-        {roadmap}
-      </ReactMarkdown>
+      <div className="roadmap-content">
+        <ReactMarkdown>{roadmap}</ReactMarkdown>
+      </div>
     </div>
   );
 }

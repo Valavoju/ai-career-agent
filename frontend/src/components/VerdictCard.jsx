@@ -1,39 +1,38 @@
-function VerdictCard({ score }) {
+function VerdictCard({
+  recommendation,
+  confidence,
+}) {
 
-  let verdict = "";
-  let confidence = "";
+  let color = "#ef4444";
 
-  if(score >= 75){
-    verdict = "Strong Hire";
-    confidence = "95%";
+  if(recommendation === "Strong Hire"){
+    color = "#22c55e";
   }
 
-  else if(score >= 55){
-    verdict = "Hire";
-    confidence = "85%";
+  else if(recommendation === "Hire"){
+    color = "#3b82f6";
   }
 
-  else if(score >= 30){
-    verdict = "Borderline";
-    confidence = "75%";
-  }
-
-  else{
-    verdict = "Needs Upskilling";
-    confidence = "70%";
+  else if(recommendation === "Borderline"){
+    color = "#f59e0b";
   }
 
   return (
     <div className="dashboard-card">
 
-      <h2>🤖 Hiring Recommendation</h2>
+      <h2>
+        🤖 Hiring Recommendation Agent
+      </h2>
 
-      <h1 className="verdict-title">
-        {verdict}
+      <h1
+        className="verdict-title"
+        style={{ color }}
+      >
+        {recommendation}
       </h1>
 
       <p className="confidence">
-        Confidence: {confidence}
+        Confidence Score: {confidence}%
       </p>
 
     </div>

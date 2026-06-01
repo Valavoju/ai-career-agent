@@ -16,7 +16,7 @@ function UploadSection({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h2>📄 Upload Resume</h2>
+      <h2>📄 Candidate Resume Upload</h2>
 
       <input
         type="file"
@@ -24,7 +24,7 @@ function UploadSection({
         onChange={(e) => setFile(e.target.files[0])}
       />
 
-      <h2>🎯 Target Role</h2>
+      <h2>💼 Job Position</h2>
 
       <select
         value={role}
@@ -39,7 +39,7 @@ function UploadSection({
         className="analyze-btn"
         onClick={analyzeResume}
       >
-        {loading ? "Analyzing..." : "🚀 Analyze Resume"}
+        {loading ? "Analyzing..." : "🤖 Start Recruitment Analysis"}
       </button>
     </motion.div>
   );

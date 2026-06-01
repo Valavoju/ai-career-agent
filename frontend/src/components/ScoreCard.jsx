@@ -1,33 +1,51 @@
 function ScoreCard({ score }) {
 
-  const getStatus = () => {
+  let label = "Needs Improvement";
+  let color = "#ef4444";
 
-    if(score >= 75)
-      return "Strong Match";
+  if (score >= 75) {
+    label = "Excellent Match";
+    color = "#22c55e";
+  }
 
-    if(score >= 50)
-      return "Good Match";
+  else if (score >= 55) {
+    label = "Good Match";
+    color = "#3b82f6";
+  }
 
-    return "Needs Improvement";
-  };
+  else if (score >= 30) {
+    label = "Average Match";
+    color = "#f59e0b";
+  }
 
   return (
     <div className="dashboard-card score-card">
 
-      <h2>ATS Match Score</h2>
+      <h2>🎯 ATS Match Score</h2>
 
       <div
-        className="score-circle"
-        style={{ "--score": score }}
+        className="score-number"
+        style={{ color }}
       >
-        <div className="score-number">
-          {score}%
-        </div>
+        {score}%
       </div>
 
-      <p className="score-status">
-        {getStatus()}
-      </p>
+      <div className="score-bar">
+        <div
+          className="score-fill"
+          style={{
+            width: `${score}%`,
+            background: color,
+          }}
+        />
+      </div>
+
+      <div
+        className="score-label"
+        style={{ color }}
+      >
+        {label}
+      </div>
 
     </div>
   );
