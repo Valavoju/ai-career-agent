@@ -70,13 +70,18 @@ function App() {
 
       setResult(response.data);
 
-      console.log("Backend Response:", response.data);
+      console.log(
+        "Backend Response:",
+        response.data
+      );
 
     } catch (error) {
       console.error(error);
 
       if (error.response) {
-        alert(`Backend Error: ${error.response.status}`);
+        alert(
+          `Backend Error: ${error.response.status}`
+        );
       } else {
         alert(
           "Backend is waking up. Please wait 20-30 seconds and try again."
@@ -108,7 +113,9 @@ function App() {
 
         {loading && (
           <div className="loading-card">
-            <h3>🤖 Recruitment AI Processing...</h3>
+            <h3>
+              🤖 Recruitment AI Processing...
+            </h3>
 
             <p>
               Resume screening, skill evaluation,
@@ -128,9 +135,13 @@ function App() {
               />
 
               <VerdictCard
-  recommendation={result.recommendation}
-  confidence={result.confidence}
-/>
+                recommendation={
+                  result.recommendation
+                }
+                confidence={
+                  result.confidence
+                }
+              />
 
             </div>
 
@@ -144,22 +155,30 @@ function App() {
 
             <SkillsCard
               title="✅ Matching Skills"
-              skills={result.matching_skills || []}
+              skills={
+                result.matching_skills || []
+              }
               color="green"
             />
 
             <SkillsCard
               title="❌ Missing Skills"
-              skills={result.missing_skills || []}
+              skills={
+                result.missing_skills || []
+              }
               color="red"
             />
 
             <CommunicationCard
-              email={result.communication_email}
+              email={
+                result.communication_email
+              }
             />
 
             <InterviewCard
-              slots={result.interview_slots}
+              slots={
+                result.interview_slots
+              }
             />
 
             <RoadmapCard

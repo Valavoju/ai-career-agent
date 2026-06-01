@@ -1,4 +1,7 @@
-function Sidebar() {
+function Sidebar({
+  activeTab,
+  setActiveTab,
+}) {
   return (
     <div className="sidebar">
 
@@ -8,17 +11,83 @@ function Sidebar() {
 
       <ul className="sidebar-menu">
 
-        <li>🏠 Dashboard</li>
+        <li
+          className={
+            activeTab === "dashboard"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("dashboard")
+          }
+        >
+          🏠 Dashboard
+        </li>
 
-        <li>📄 Resume Screening Agent</li>
+        <li
+          className={
+            activeTab === "screening"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("screening")
+          }
+        >
+          📄 Screening
+        </li>
 
-        <li>🧠 Skill Evaluation Agent</li>
+        <li
+          className={
+            activeTab === "skills"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("skills")
+          }
+        >
+          🧠 Skills
+        </li>
 
-        <li>📅 Interview Scheduling Agent</li>
+        <li
+          className={
+            activeTab === "interview"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("interview")
+          }
+        >
+          📅 Interview
+        </li>
 
-        <li>📧 Communication Agent</li>
+        <li
+          className={
+            activeTab === "communication"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("communication")
+          }
+        >
+          📧 Communication
+        </li>
 
-        <li>🤖 Hiring Recommendation Agent</li>
+        <li
+          className={
+            activeTab === "recommendation"
+              ? "active"
+              : ""
+          }
+          onClick={() =>
+            setActiveTab("recommendation")
+          }
+        >
+          🤖 Hiring
+        </li>
 
       </ul>
 
