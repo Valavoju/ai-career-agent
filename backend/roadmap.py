@@ -1,27 +1,29 @@
-from groq_client import client
-
 def generate_roadmap(role, missing_skills):
 
-    prompt = f"""
-Create a concise learning roadmap.
+    if not missing_skills:
+        return f"""
+# Congratulations 🎉
 
-Target Role:
-{role}
+You already match most requirements for the {role} role.
 
-Missing Skills:
-{missing_skills}
-
-Keep under 200 words.
+Continue building projects, practicing interview questions, and improving system design skills.
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    roadmap = f"# Learning Roadmap: {role}\n\n"
 
-    return response.choices[0].message.content
+    roadmap += "## Phase 1: Foundations (3-6 months)\n"
+
+    for skill in missing_skills[:3]:
+        roadmap += f"- Learn {skill}\n"
+
+    roadmap += "\n## Phase 2: Specialized Topics (6-12 months)\n"
+
+    for skill in missing_skills[3:6]:
+        roadmap += f"- Gain hands-on experience in {skill}\n"
+
+    roadmap += "\n## Phase 3: Projects and Practice\n"
+    roadmap += "- Build real-world projects\n"
+    roadmap += "- Participate in hackathons\n"
+    roadmap += "- Practice technical interviews\n"
+
+    return roadmap

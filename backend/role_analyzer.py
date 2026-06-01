@@ -1,40 +1,69 @@
-from groq_client import client
-import json
-import re
-
 def get_role_requirements(role):
 
-    prompt = f"""
-For the role: {role}
+    roles = {
 
-Return ONLY JSON.
+        "AI Engineer": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "Natural Language Processing",
+            "Computer Vision",
+            "Data Structures",
+            "Cloud Computing",
+            "DevOps",
+            "API Design"
+        ],
 
-{{
-    "required_skills": []
-}}
-"""
+        "Machine Learning Engineer": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "TensorFlow",
+            "PyTorch",
+            "Statistics",
+            "Data Structures",
+            "Cloud Computing"
+        ],
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
+        "Data Scientist": [
+            "Python",
+            "SQL",
+            "Statistics",
+            "Machine Learning",
+            "Data Visualization",
+            "Pandas",
+            "NumPy"
+        ],
+
+        "Frontend Developer": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Responsive Design",
+            "Git"
+        ],
+
+        "Backend Developer": [
+            "Python",
+            "FastAPI",
+            "Flask",
+            "SQL",
+            "REST API",
+            "Git"
+        ],
+
+        "Full Stack Developer": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Python",
+            "SQL",
+            "Git"
         ]
-    )
-
-    result = response.choices[0].message.content
-
-    try:
-        match = re.search(r'\{.*\}', result, re.DOTALL)
-
-        if match:
-            return json.loads(match.group())
-
-    except Exception:
-        pass
+    }
 
     return {
-        "required_skills": []
+        "required_skills": roles.get(role, [])
     }
