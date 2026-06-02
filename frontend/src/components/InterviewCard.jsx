@@ -1,5 +1,4 @@
 function InterviewCard({ plan }) {
-
   if (!plan) {
     return (
       <div className="dashboard-card">
@@ -11,7 +10,6 @@ function InterviewCard({ plan }) {
 
   return (
     <div className="dashboard-card">
-
       <h2>📅 Interview Scheduling Agent</h2>
 
       <p>
@@ -26,16 +24,13 @@ function InterviewCard({ plan }) {
         <>
           <h3>Interview Rounds</h3>
 
-<div className="rounds-grid">
-  {plan.rounds.map((round, index) => (
-    <div
-      key={index}
-      className="round-card"
-    >
-      {round}
-    </div>
-  ))}
-</div>
+          <div className="rounds-grid">
+            {plan.rounds.map((round, index) => (
+              <div key={index} className="round-card">
+                {round}
+              </div>
+            ))}
+          </div>
         </>
       )}
 
@@ -43,22 +38,17 @@ function InterviewCard({ plan }) {
         <>
           <h3>Available Slots</h3>
 
-          <ul>
+          <div className="slots-grid">
             {plan.slots.map((slot, index) => (
-              <li key={index}>
+              <div key={index} className="slot-card">
                 {slot}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </>
       )}
 
-      {plan.message && (
-        <p>
-          {plan.message}
-        </p>
-      )}
-
+      {plan.message && <p>{plan.message}</p>}
     </div>
   );
 }
