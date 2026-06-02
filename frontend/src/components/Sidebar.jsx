@@ -65,21 +65,6 @@ function Sidebar({
 
         <li
           className={
-            activeTab === "communication"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab(
-              "communication"
-            )
-          }
-        >
-          📧 Communication
-        </li>
-
-        <li
-          className={
             activeTab === "hiring"
               ? "active"
               : ""

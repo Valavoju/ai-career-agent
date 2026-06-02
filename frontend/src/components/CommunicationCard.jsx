@@ -4,28 +4,49 @@ function CommunicationCard({ result }) {
 
   const sendEmail = () => {
 
-    emailjs.send(
-      "service_y2xmyd4",
-      "template_fecm0dj",
-      {
-        candidate_name: "Avinash",
-        role: result.role,
-        score: result.match_score,
-        recommendation: result.recommendation,
-        confidence: result.confidence,
-        matching_skills: result.matching_skills.join(", "),
-        missing_skills: result.missing_skills.join(", "),
-        roadmap: result.roadmap,
-      },
-      "kYNRgwz1CN6SWMunc"
-    )
+    if (!result.candidate_email) {
+  alert(
+    "No email address found in the uploaded resume."
+  );
+  return;
+}
+
+   emailjs.send(
+  "service_y2xmyd4",
+  "template_fecm0dj",
+  {
+    candidate_name: result.candidate_name,
+
+    to_email: result.candidate_email,
+
+    role: result.role,
+
+    score: result.match_score,
+
+    recommendation: result.recommendation,
+
+    confidence: result.confidence,
+
+    matching_skills:
+      result.matching_skills.join(", "),
+
+    missing_skills:
+      result.missing_skills.join(", "),
+
+    roadmap: result.roadmap,
+  },
+  "kYNRgwz1CN6SWMunc"
+)
     .then(() => {
       alert("Email sent successfully!");
     })
     .catch((error) => {
-      console.error(error);
-      alert("Failed to send email");
-    });
+  console.error("EmailJS Error:", error);
+
+  alert(
+    JSON.stringify(error)
+  );
+});
   };
 
   return (

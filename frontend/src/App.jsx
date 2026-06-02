@@ -3,15 +3,13 @@ import axios from "axios";
 
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
-
+import emailjs from "@emailjs/browser";
 import UploadSection from "./components/UploadSection";
 import ScoreCard from "./components/ScoreCard";
 import SkillsCard from "./components/SkillsCard";
 import VerdictCard from "./components/VerdictCard";
 import RoadmapCard from "./components/RoadmapCard";
 import ResumeSummaryCard from "./components/ResumeSummaryCard";
-
-import CommunicationCard from "./components/CommunicationCard";
 import InterviewCard from "./components/InterviewCard";
 
 import "./App.css";
@@ -22,15 +20,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  const [activeTab, setActiveTab] =
-    useState("dashboard");
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
-    axios
-      .get(
-        "https://ai-career-agent-yord.onrender.com/"
-      )
-      .catch(() => {});
+    axios.get("https://ai-career-agent-yord.onrender.com/").catch(() => {});
   }, []);
 
   const roles = [
@@ -48,6 +41,46 @@ function App() {
     "Python Developer",
     "React Developer",
   ];
+
+  const sendEmail = (data) => {
+    if (!data.candidate_email) {
+      console.log("No email address found in resume");
+      return;
+    }
+
+    emailjs
+      .send(
+        "service_y2xmyd4",
+        "template_fecm0dj",
+        {
+          candidate_name: data.candidate_name,
+
+          to_email: data.candidate_email,
+
+          role: data.role,
+
+          score: data.match_score,
+
+          recommendation: data.recommendation,
+
+          confidence: data.confidence,
+
+          matching_skills: data.matching_skills.join(", "),
+
+          missing_skills: data.missing_skills.join(", "),
+
+          roadmap: data.roadmap,
+        },
+
+        "kYNRgwz1CN6SWMunc",
+      )
+      .then(() => {
+        console.log(`Report sent to ${data.candidate_email}`);
+      })
+      .catch((error) => {
+        console.error("EmailJS Error:", error);
+      });
+  };
 
   const analyzeResume = async () => {
     if (!file) {
@@ -68,29 +101,24 @@ function App() {
         formData,
         {
           headers: {
-            "Content-Type":
-              "multipart/form-data",
+            "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
-
       setResult(response.data);
 
-      console.log(
-        "Backend Response:",
-        response.data
-      );
+      if (response.data.candidate_email) {
+        sendEmail(response.data);
+      }
+
+      console.log("Backend Response:", response.data);
     } catch (error) {
       console.error(error);
 
       if (error.response) {
-        alert(
-          `Backend Error: ${error.response.status}`
-        );
+        alert(`Backend Error: ${error.response.status}`);
       } else {
-        alert(
-          "Backend is waking up. Please wait 20-30 seconds and try again."
-        );
+        alert("Backend is waking up. Please wait 20-30 seconds and try again.");
       }
     } finally {
       setLoading(false);
@@ -99,14 +127,9 @@ function App() {
 
   return (
     <div className="dashboard-layout">
-
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="main-content">
-
         <Navbar />
 
         <UploadSection
@@ -121,40 +144,28 @@ function App() {
 
         {loading && (
           <div className="loading-card">
-            <h3>
-              🤖 Recruitment AI Processing...
-            </h3>
+            <h3>🤖 Recruitment AI Processing...</h3>
 
             <p>
-              Resume screening, skill evaluation,
-              hiring recommendation and interview
-              scheduling are running...
+              Resume screening, skill evaluation, hiring recommendation and
+              interview scheduling are running...
             </p>
           </div>
         )}
 
         {result && (
           <div className="results-container">
-
             {/* DASHBOARD */}
 
             {activeTab === "dashboard" && (
               <>
                 <div className="top-grid">
-
-                  <ScoreCard
-                    score={result.match_score}
-                  />
+                  <ScoreCard score={result.match_score} />
 
                   <VerdictCard
-                    recommendation={
-                      result.recommendation
-                    }
-                    confidence={
-                      result.confidence
-                    }
+                    recommendation={result.recommendation}
+                    confidence={result.confidence}
                   />
-
                 </div>
 
                 <ResumeSummaryCard
@@ -179,9 +190,7 @@ function App() {
                   } important skills.`}
                 />
 
-                <ScoreCard
-                  score={result.match_score}
-                />
+                <ScoreCard score={result.match_score} />
               </>
             )}
 
@@ -191,62 +200,37 @@ function App() {
               <>
                 <SkillsCard
                   title="✅ Matching Skills"
-                  skills={
-                    result.matching_skills || []
-                  }
+                  skills={result.matching_skills || []}
                   color="green"
                 />
 
                 <SkillsCard
                   title="❌ Missing Skills"
-                  skills={
-                    result.missing_skills || []
-                  }
+                  skills={result.missing_skills || []}
                   color="red"
                 />
 
-                <RoadmapCard
-                  roadmap={result.roadmap}
-                />
+                <RoadmapCard roadmap={result.roadmap} />
               </>
-            )}
-
-            {/* COMMUNICATION */}
-
-            {activeTab === "communication" && (
-              <CommunicationCard
-  result={result}
-/>
             )}
 
             {/* INTERVIEW */}
 
             {activeTab === "interview" && (
-              <InterviewCard
-                slots={
-                  result.interview_slots
-                }
-              />
+              <InterviewCard slots={result.interview_slots} />
             )}
 
             {/* HIRING */}
 
             {activeTab === "hiring" && (
               <VerdictCard
-                recommendation={
-                  result.recommendation
-                }
-                confidence={
-                  result.confidence
-                }
+                recommendation={result.recommendation}
+                confidence={result.confidence}
               />
             )}
-
           </div>
         )}
-
       </div>
-
     </div>
   );
 }

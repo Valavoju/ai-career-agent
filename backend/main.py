@@ -1,13 +1,17 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 
-from resume_parser import extract_text
+from resume_parser import (
+    extract_text,
+    extract_email,
+    extract_name
+)
+
 from skill_extractor import extract_skills
 from role_analyzer import get_role_requirements
 from matcher import calculate_match
 from roadmap import generate_roadmap
 from advisor import get_hiring_recommendation
-from email_extractor import extract_email
 
 # NEW AGENTS
 from communication_agent import generate_hr_email
@@ -48,7 +52,13 @@ async def analyze_resume(
 
     resume_text = extract_text(file.filename)
 
+    # Extract Candidate Information
+
     candidate_email = extract_email(resume_text)
+
+    candidate_name = extract_name(resume_text)
+
+    # Resume Analysis
 
     resume_analysis = extract_skills(resume_text)
 
@@ -92,6 +102,8 @@ async def analyze_resume(
         # Basic Information
 
         "role": role,
+
+        "candidate_name": candidate_name,
 
         "candidate_email": candidate_email,
 
