@@ -70,7 +70,9 @@ function Sidebar({
               : ""
           }
           onClick={() =>
-            setActiveTab("communication")
+            setActiveTab(
+              "communication"
+            )
           }
         >
           📧 Communication
@@ -78,19 +80,18 @@ function Sidebar({
 
         <li
           className={
-            activeTab === "recommendation"
+            activeTab === "hiring"
               ? "active"
               : ""
           }
           onClick={() =>
-            setActiveTab("recommendation")
+            setActiveTab("hiring")
           }
         >
           🤖 Hiring
         </li>
 
       </ul>
-
     </div>
   );
 }

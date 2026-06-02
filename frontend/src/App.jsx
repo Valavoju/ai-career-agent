@@ -22,9 +22,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
+  const [activeTab, setActiveTab] =
+    useState("dashboard");
+
   useEffect(() => {
     axios
-      .get("https://ai-career-agent-yord.onrender.com/")
+      .get(
+        "https://ai-career-agent-yord.onrender.com/"
+      )
       .catch(() => {});
   }, []);
 
@@ -63,7 +68,8 @@ function App() {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type":
+              "multipart/form-data",
           },
         }
       );
@@ -74,7 +80,6 @@ function App() {
         "Backend Response:",
         response.data
       );
-
     } catch (error) {
       console.error(error);
 
@@ -95,7 +100,10 @@ function App() {
   return (
     <div className="dashboard-layout">
 
-      <Sidebar />
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
 
       <div className="main-content">
 
@@ -128,12 +136,102 @@ function App() {
         {result && (
           <div className="results-container">
 
-            <div className="top-grid">
+            {/* DASHBOARD */}
 
-              <ScoreCard
-                score={result.match_score}
+            {activeTab === "dashboard" && (
+              <>
+                <div className="top-grid">
+
+                  <ScoreCard
+                    score={result.match_score}
+                  />
+
+                  <VerdictCard
+                    recommendation={
+                      result.recommendation
+                    }
+                    confidence={
+                      result.confidence
+                    }
+                  />
+
+                </div>
+
+                <ResumeSummaryCard
+                  summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
+                    result.matching_skills?.length || 0
+                  } matching skills and need to improve ${
+                    result.missing_skills?.length || 0
+                  } important skills to become more competitive for the ${role} role.`}
+                />
+              </>
+            )}
+
+            {/* SCREENING */}
+
+            {activeTab === "screening" && (
+              <>
+                <ResumeSummaryCard
+                  summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
+                    result.matching_skills?.length || 0
+                  } matching skills and need to improve ${
+                    result.missing_skills?.length || 0
+                  } important skills.`}
+                />
+
+                <ScoreCard
+                  score={result.match_score}
+                />
+              </>
+            )}
+
+            {/* SKILLS */}
+
+            {activeTab === "skills" && (
+              <>
+                <SkillsCard
+                  title="✅ Matching Skills"
+                  skills={
+                    result.matching_skills || []
+                  }
+                  color="green"
+                />
+
+                <SkillsCard
+                  title="❌ Missing Skills"
+                  skills={
+                    result.missing_skills || []
+                  }
+                  color="red"
+                />
+
+                <RoadmapCard
+                  roadmap={result.roadmap}
+                />
+              </>
+            )}
+
+            {/* COMMUNICATION */}
+
+            {activeTab === "communication" && (
+              <CommunicationCard
+  result={result}
+/>
+            )}
+
+            {/* INTERVIEW */}
+
+            {activeTab === "interview" && (
+              <InterviewCard
+                slots={
+                  result.interview_slots
+                }
               />
+            )}
 
+            {/* HIRING */}
+
+            {activeTab === "hiring" && (
               <VerdictCard
                 recommendation={
                   result.recommendation
@@ -142,48 +240,7 @@ function App() {
                   result.confidence
                 }
               />
-
-            </div>
-
-            <ResumeSummaryCard
-              summary={`Your resume matches ${result.match_score}% of the selected role requirements. You currently possess ${
-                result.matching_skills?.length || 0
-              } matching skills and need to improve ${
-                result.missing_skills?.length || 0
-              } important skills to become more competitive for the ${role} role.`}
-            />
-
-            <SkillsCard
-              title="✅ Matching Skills"
-              skills={
-                result.matching_skills || []
-              }
-              color="green"
-            />
-
-            <SkillsCard
-              title="❌ Missing Skills"
-              skills={
-                result.missing_skills || []
-              }
-              color="red"
-            />
-
-            <CommunicationCard
-              email={
-                result.communication_email
-              }
-            />
-
-            <InterviewCard
-              slots={
-                result.interview_slots
-              }
-            />
-
-            <RoadmapCard
-              roadmap={result.roadmap}
-            />
+            )}
 
           </div>
         )}
