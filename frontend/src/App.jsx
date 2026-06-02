@@ -118,6 +118,9 @@ function App() {
       );
       setResult(response.data);
 
+      console.log(response.data);
+      console.log(response.data.interview_plan);
+
       if (response.data.candidate_email) {
         sendEmail(response.data);
       }

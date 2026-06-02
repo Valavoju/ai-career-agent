@@ -26,13 +26,16 @@ function InterviewCard({ plan }) {
         <>
           <h3>Interview Rounds</h3>
 
-          <ul>
-            {plan.rounds.map((round, index) => (
-              <li key={index}>
-                {round}
-              </li>
-            ))}
-          </ul>
+<div className="rounds-grid">
+  {plan.rounds.map((round, index) => (
+    <div
+      key={index}
+      className="round-card"
+    >
+      {round}
+    </div>
+  ))}
+</div>
         </>
       )}
 
