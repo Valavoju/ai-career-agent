@@ -33,45 +33,78 @@ SIDEBAR FINAL POLISH
 ========================= */
 
 .sidebar {
-  width: 260px;
+  width: 300px;
+  min-width:300px;
+  min-height: 100vh;
+
   background: #ffffff;
+
+  padding: 30px 20px;
+
   border-right: 1px solid #e5e7eb;
-  padding: 25px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar-logo {
-  font-size: 28px;
-  font-weight: 700;
-  color: #0a66c2;
-  margin-bottom: 40px;
-  text-align: center;
+.sidebar-logo{
+  font-size:34px;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:40px;
 }
 
-.sidebar-menu{
-  list-style:none;
-  margin-top:30px;
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
+.sidebar-menu li {
+  display: flex;
+  align-items: center;
+  white-space:nowrap;
+  gap: 12px;
+
+  padding: 14px 18px;
+
+  margin-bottom: 14px;
+
+  border-radius: 12px;
+
+  font-size: 24px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu li:hover {
+  background: #f3f8ff;
+  color: #1565c0;
+}
 
 .sidebar-menu li.active{
-  background:#0a66c2;
+
+  background:linear-gradient(
+    135deg,
+    #1976d2,
+    #1565c0
+  );
+
   color:white;
-}
 
-.sidebar-menu li{
-  cursor:pointer;
-  transition:.3s;
-}
+  box-shadow:
+  0 10px 25px rgba(
+    25,
+    118,
+    210,
+    0.25
+  );
 
-.sidebar-menu li:hover{
-  background:#e8f3ff;
+  transform:translateX(5px);
 }
-
 /* Active Dashboard */
 
 .sidebar-menu li:first-child {
@@ -80,16 +113,6 @@ SIDEBAR FINAL POLISH
   font-weight: 600;
 }
 
-/* =========================
-MAIN CONTENT FIX
-========================= */
-
-.main-content {
-  margin-left: 260px;
-  width: calc(100% - 260px);
-  padding: 30px;
-  min-height: 100vh;
-}
 
 /* =========================
 CARD CONSISTENCY
@@ -112,12 +135,11 @@ CARD CONSISTENCY
 MAIN CONTENT
 ==================================== */
 
-.main-content {
-  margin-left: 260px;
-  width: calc(100% - 260px);
-  padding: 30px;
+.main-content{
+  flex:1;
+  padding:30px;
+  max-width:1400px;
 }
-
 /* =========================
 NAVBAR FINAL
 ========================= */
@@ -169,6 +191,8 @@ UPLOAD CARD
   border: 1px solid #e5e7eb;
   padding: 30px;
   margin-bottom: 25px;
+  max-width:1100px;
+  margin:auto;
 }
 
 .upload-card h2 {
@@ -639,4 +663,56 @@ INTERVIEW AGENT
   border-left: 4px solid #2563eb;
   font-size: 16px;
   font-weight: 500;
+}
+
+.rounds-grid,
+.slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.round-card,
+.slot-card {
+  min-width: 250px;
+  max-width: 350px;
+
+  padding: 18px 25px;
+
+  background: white;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,0.08);
+
+  font-size: 18px;
+  font-weight: 600;
+
+  text-align: center;
+
+  transition: 0.3s ease;
+}
+
+.round-card {
+  border-left: 5px solid #2563eb;
+}
+
+.slot-card {
+  border-left: 5px solid #10b981;
+}
+
+.round-card:hover,
+.slot-card:hover {
+  transform: translateY(-4px);
+}
+.interview-card {
+  text-align: center;
+}
+
+.interview-card h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
 }

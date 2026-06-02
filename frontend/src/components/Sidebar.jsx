@@ -1,81 +1,43 @@
-function Sidebar({
-  activeTab,
-  setActiveTab,
-}) {
+function Sidebar({ activeTab, setActiveTab }) {
   return (
     <div className="sidebar">
-
-      <div className="sidebar-logo">
-        RecruitAI
-      </div>
+      <div className="sidebar-logo">RecruitAI</div>
 
       <ul className="sidebar-menu">
-
         <li
-          className={
-            activeTab === "dashboard"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab("dashboard")
-          }
+          className={activeTab === "dashboard" ? "active" : ""}
+          onClick={() => setActiveTab("dashboard")}
         >
           🏠 Dashboard
         </li>
 
         <li
-          className={
-            activeTab === "screening"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab("screening")
-          }
+          className={activeTab === "screening" ? "active" : ""}
+          onClick={() => setActiveTab("screening")}
         >
-          📄 Screening
+          📄 Resume Screening
         </li>
 
         <li
-          className={
-            activeTab === "skills"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab("skills")
-          }
+          className={activeTab === "skills" ? "active" : ""}
+          onClick={() => setActiveTab("skills")}
         >
-          🧠 Skills
+          🧠 Skill Evaluation
         </li>
 
         <li
-          className={
-            activeTab === "interview"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab("interview")
-          }
+          className={activeTab === "interview" ? "active" : ""}
+          onClick={() => setActiveTab("interview")}
         >
-          📅 Interview
+          📅 Interview Planner
         </li>
 
         <li
-          className={
-            activeTab === "hiring"
-              ? "active"
-              : ""
-          }
-          onClick={() =>
-            setActiveTab("hiring")
-          }
+          className={activeTab === "hiring" ? "active" : ""}
+          onClick={() => setActiveTab("hiring")}
         >
-          🤖 Hiring
+          🤖 Hiring Decision
         </li>
-
       </ul>
     </div>
   );
