@@ -48,6 +48,9 @@ function App() {
       return;
     }
 
+    console.log("Candidate Name:", data.candidate_name);
+    console.log("Candidate Email:", data.candidate_email);
+
     emailjs
       .send(
         "service_y2xmyd4",
@@ -140,15 +143,17 @@ function App() {
       <div className="main-content">
         <Navbar />
 
-        <UploadSection
-          file={file}
-          setFile={setFile}
-          role={role}
-          setRole={setRole}
-          roles={roles}
-          analyzeResume={analyzeResume}
-          loading={loading}
-        />
+        {activeTab === "dashboard" && (
+  <UploadSection
+    file={file}
+    setFile={setFile}
+    role={role}
+    setRole={setRole}
+    roles={roles}
+    analyzeResume={analyzeResume}
+    loading={loading}
+  />
+)}
 
         {loading && (
           <div className="loading-card">
@@ -225,8 +230,10 @@ function App() {
             {/* INTERVIEW */}
 
             {activeTab === "interview" && (
-              <InterviewCard slots={result.interview_slots} />
-            )}
+  <InterviewCard
+    plan={result.interview_plan}
+  />
+)}
 
             {/* HIRING */}
 

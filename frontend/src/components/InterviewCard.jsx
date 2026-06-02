@@ -1,21 +1,60 @@
-function InterviewCard({ slots }) {
+function InterviewCard({ plan }) {
+
+  if (!plan) {
+    return (
+      <div className="dashboard-card">
+        <h2>📅 Interview Scheduling Agent</h2>
+        <p>No interview data available.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="dashboard-card interview-card">
+    <div className="dashboard-card">
 
       <h2>📅 Interview Scheduling Agent</h2>
 
-      <div className="slots-container">
+      <p>
+        <strong>Difficulty:</strong> {plan.difficulty}
+      </p>
 
-        {slots?.map((slot, index) => (
-          <div
-            key={index}
-            className="slot-item"
-          >
-            {slot}
-          </div>
-        ))}
+      <p>
+        <strong>Duration:</strong> {plan.duration}
+      </p>
 
-      </div>
+      {plan.rounds?.length > 0 && (
+        <>
+          <h3>Interview Rounds</h3>
+
+          <ul>
+            {plan.rounds.map((round, index) => (
+              <li key={index}>
+                {round}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {plan.slots?.length > 0 && (
+        <>
+          <h3>Available Slots</h3>
+
+          <ul>
+            {plan.slots.map((slot, index) => (
+              <li key={index}>
+                {slot}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {plan.message && (
+        <p>
+          {plan.message}
+        </p>
+      )}
 
     </div>
   );

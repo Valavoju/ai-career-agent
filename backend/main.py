@@ -15,7 +15,7 @@ from advisor import get_hiring_recommendation
 
 # NEW AGENTS
 from communication_agent import generate_hr_email
-from interview_scheduler import generate_interview_slots
+from interview_scheduler import generate_interview_plan
 
 app = FastAPI()
 
@@ -95,7 +95,10 @@ async def analyze_resume(
 
     # Interview Scheduling Agent
 
-    interview_slots = generate_interview_slots()
+    interview_plan = generate_interview_plan(
+        recommendation["recommendation"],
+        result["match_score"]
+    )
 
     return {
 
@@ -141,8 +144,8 @@ async def analyze_resume(
 
         # Interview Scheduling Agent
 
-        "interview_slots":
-            interview_slots,
+        "interview_plan":
+            interview_plan,
 
         # Career Roadmap
 
