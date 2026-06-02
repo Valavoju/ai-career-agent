@@ -75,8 +75,16 @@ function App() {
         "kYNRgwz1CN6SWMunc",
       )
       .then(() => {
-        console.log(`Report sent to ${data.candidate_email}`);
-      })
+
+  alert(
+    `Report successfully sent to ${data.candidate_email}`
+  );
+
+  console.log(
+    `Report sent to ${data.candidate_email}`
+  );
+
+})
       .catch((error) => {
         console.error("EmailJS Error:", error);
       });
