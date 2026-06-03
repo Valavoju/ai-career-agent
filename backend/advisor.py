@@ -32,11 +32,19 @@ Return ONLY valid JSON.
 
 {{
     "recommendation": "",
-    "confidence": 0,
+    "confidence_percentage": 0,
     "risk_level": "",
     "assessment": "",
     "action": ""
 }}
+Rules:
+
+- confidence_percentage must be an integer between 0 and 100.
+- recommendation must be one of:
+  Strong Hire
+  Hire
+  Borderline
+  Not Recommended
 """
 
     response = client.chat.completions.create(
@@ -85,8 +93,7 @@ Return ONLY valid JSON.
         "recommendation":
             "Borderline",
 
-        "confidence":
-            70,
+         "confidence_percentage": 70,
 
         "risk_level":
             "Medium",

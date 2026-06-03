@@ -7,6 +7,10 @@ from resume_parser import (
     extract_name
 )
 
+from resume_intelligence_agent import (
+    generate_candidate_intelligence
+)
+
 from skill_extractor import extract_skills
 from role_analyzer import get_role_requirements
 from matcher import calculate_match
@@ -51,6 +55,13 @@ async def analyze_resume(
     # Extract resume text
 
     resume_text = extract_text(file.filename)
+
+    candidate_intelligence = (
+        generate_candidate_intelligence(
+            resume_text,
+            role
+        )
+    )
 
     # Extract Candidate Information
 
@@ -146,7 +157,7 @@ async def analyze_resume(
             recommendation["recommendation"],
 
         "confidence":
-            recommendation["confidence"],
+            recommendation["confidence_percentage"],
 
         # Candidate Communication Agent
 
@@ -166,6 +177,9 @@ async def analyze_resume(
 
         "recommended_action":
             recommendation["action"],
+
+        "candidate_intelligence":
+            candidate_intelligence,
 
         # Career Roadmap
 
