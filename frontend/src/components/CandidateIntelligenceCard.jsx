@@ -3,9 +3,11 @@ function CandidateIntelligenceCard({ intelligence }) {
   if (!intelligence) return null;
 
   return (
-    <div className="dashboard-card">
+    <div className="dashboard-card intelligence-card">
 
-      <h2>🧠 Candidate Intelligence Agent</h2>
+      <h2>
+        🧠 AI Candidate Intelligence
+      </h2>
 
       <div className="intelligence-section">
 
@@ -17,37 +19,47 @@ function CandidateIntelligenceCard({ intelligence }) {
 
       </div>
 
-      <div className="intelligence-section">
+      <div className="intelligence-grid">
 
-        <h3>💪 Strengths</h3>
+        <div className="intelligence-section">
 
-        <ul>
-          {intelligence.strengths?.map((item, index) => (
-            <li key={index}>
-              {item}
-            </li>
-          ))}
-        </ul>
+          <h3>💪 Strength Areas</h3>
+
+          <ul>
+            {intelligence.strengths?.map(
+              (item, index) => (
+                <li key={index}>
+                  ✅ {item}
+                </li>
+              )
+            )}
+          </ul>
+
+        </div>
+
+        <div className="intelligence-section">
+
+          <h3>⚠ Improvement Areas</h3>
+
+          <ul>
+            {intelligence.weaknesses?.map(
+              (item, index) => (
+                <li key={index}>
+                  🔺 {item}
+                </li>
+              )
+            )}
+          </ul>
+
+        </div>
 
       </div>
 
       <div className="intelligence-section">
 
-        <h3>⚠ Improvement Areas</h3>
-
-        <ul>
-          {intelligence.weaknesses?.map((item, index) => (
-            <li key={index}>
-              {item}
-            </li>
-          ))}
-        </ul>
-
-      </div>
-
-      <div className="intelligence-section">
-
-        <h3>🚀 Recommended Career Path</h3>
+        <h3>
+          🚀 Recommended Career Path
+        </h3>
 
         <p>
           {intelligence.career_path}
