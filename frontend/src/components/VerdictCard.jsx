@@ -64,8 +64,8 @@ function VerdictCard({
       </h1>
 
       <p className="confidence">
-  Recruiter Confidence: {Math.round(confidence * 100)}%
-</p>
+        Recruiter Confidence: {confidence}%
+      </p>
 
       <div className="ai-insight">
 

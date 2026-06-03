@@ -8,7 +8,8 @@ def get_hiring_recommendation(
     score,
     matching_skills,
     missing_skills,
-    role
+    role,
+    resume_text
 ):
 
     prompt = f"""
@@ -18,6 +19,9 @@ Analyze the candidate profile.
 
 Target Role:
 {role}
+
+Resume:
+{resume_text}
 
 ATS Score:
 {score}
@@ -55,7 +59,7 @@ Rules:
                 "content": prompt
             }
         ],
-        temperature=0.4
+        temperature=0
     )
 
     result = response.choices[0].message.content.strip()

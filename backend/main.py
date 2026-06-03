@@ -97,7 +97,8 @@ async def analyze_resume(
         result["match_score"],
         result["matching_skills"],
         result["missing_skills"],
-        role
+        role,
+        resume_text
 )
 
     # Candidate Communication Agent
@@ -127,6 +128,8 @@ async def analyze_resume(
         "candidate_email": candidate_email,
 
         # Resume Screening Agent
+
+        
 
         "resume_skills":
             resume_analysis["skills"],

@@ -11,6 +11,8 @@ import VerdictCard from "./components/VerdictCard";
 import RoadmapCard from "./components/RoadmapCard";
 import ResumeSummaryCard from "./components/ResumeSummaryCard";
 import InterviewCard from "./components/InterviewCard";
+import CandidateIntelligenceCard
+from "./components/CandidateIntelligenceCard";
 
 import "./App.css";
 
@@ -191,6 +193,10 @@ function App() {
                     result.missing_skills?.length || 0
                   } important skills to become more competitive for the ${role} role.`}
                 />
+
+                <CandidateIntelligenceCard
+  intelligence={result.candidate_intelligence}
+/>
               </>
             )}
 
