@@ -1,29 +1,82 @@
-def generate_roadmap(role, missing_skills):
+import json
+import re
 
-    if not missing_skills:
-        return f"""
-# Congratulations 🎉
+from groq_client import client
 
-You already match most requirements for the {role} role.
 
-Continue building projects, practicing interview questions, and improving system design skills.
+def generate_roadmap(
+    role,
+    missing_skills
+):
+
+    prompt = f"""
+You are an AI Career Mentor.
+
+Create a professional learning roadmap.
+
+Target Role:
+{role}
+
+Missing Skills:
+{missing_skills}
+
+Return ONLY JSON.
+
+{{
+    "readiness": "",
+    "estimated_time": "",
+    "roadmap": "",
+    "expected_outcome": ""
+}}
 """
 
-    roadmap = f"# Learning Roadmap: {role}\n\n"
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.6
+    )
 
-    roadmap += "## Phase 1: Foundations (3-6 months)\n"
+    result = response.choices[0].message.content
 
-    for skill in missing_skills[:3]:
-        roadmap += f"- Learn {skill}\n"
+    try:
 
-    roadmap += "\n## Phase 2: Specialized Topics (6-12 months)\n"
+        result = result.replace(
+            "```json",
+            ""
+        )
 
-    for skill in missing_skills[3:6]:
-        roadmap += f"- Gain hands-on experience in {skill}\n"
+        result = result.replace(
+            "```",
+            ""
+        )
 
-    roadmap += "\n## Phase 3: Projects and Practice\n"
-    roadmap += "- Build real-world projects\n"
-    roadmap += "- Participate in hackathons\n"
-    roadmap += "- Practice technical interviews\n"
+        match = re.search(
+            r'\{.*\}',
+            result,
+            re.DOTALL
+        )
 
-    return roadmap
+        if match:
+            data = json.loads(
+                match.group()
+            )
+
+            return data
+
+    except Exception as e:
+        print(
+            "Roadmap Agent Error:",
+            e
+        )
+
+    return {
+        "readiness": "Unknown",
+        "estimated_time": "",
+        "roadmap": "",
+        "expected_outcome": ""
+    }

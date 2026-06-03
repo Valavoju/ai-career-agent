@@ -1,25 +1,99 @@
-def get_hiring_recommendation(score):
+import json
+import re
 
-    if score >= 75:
-        return {
-            "recommendation": "Strong Hire",
-            "confidence": 95
-        }
+from groq_client import client
 
-    elif score >= 55:
-        return {
-            "recommendation": "Hire",
-            "confidence": 85
-        }
 
-    elif score >= 30:
-        return {
-            "recommendation": "Borderline",
-            "confidence": 75
-        }
+def get_hiring_recommendation(
+    score,
+    matching_skills,
+    missing_skills,
+    role
+):
 
-    else:
-        return {
-            "recommendation": "Needs Upskilling",
-            "confidence": 70
-        }
+    prompt = f"""
+You are a senior technical recruiter.
+
+Analyze the candidate profile.
+
+Target Role:
+{role}
+
+ATS Score:
+{score}
+
+Matching Skills:
+{matching_skills}
+
+Missing Skills:
+{missing_skills}
+
+Return ONLY valid JSON.
+
+{{
+    "recommendation": "",
+    "confidence": 0,
+    "risk_level": "",
+    "assessment": "",
+    "action": ""
+}}
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.4
+    )
+
+    result = response.choices[0].message.content.strip()
+
+    try:
+
+        result = result.replace(
+            "```json",
+            ""
+        )
+
+        result = result.replace(
+            "```",
+            ""
+        )
+
+        match = re.search(
+            r'\{.*\}',
+            result,
+            re.DOTALL
+        )
+
+        if match:
+            return json.loads(
+                match.group()
+            )
+
+    except Exception as e:
+        print(
+            "Hiring Agent Error:",
+            e
+        )
+
+    return {
+        "recommendation":
+            "Borderline",
+
+        "confidence":
+            70,
+
+        "risk_level":
+            "Medium",
+
+        "assessment":
+            "Unable to generate assessment.",
+
+        "action":
+            "Manual review recommended."
+    }

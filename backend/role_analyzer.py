@@ -1,69 +1,65 @@
+import json
+import re
+
+from groq_client import client
+
+
 def get_role_requirements(role):
 
-    roles = {
+    prompt = f"""
+You are an expert recruiter.
 
-        "AI Engineer": [
-            "Python",
-            "Machine Learning",
-            "Deep Learning",
-            "Natural Language Processing",
-            "Computer Vision",
-            "Data Structures",
-            "Cloud Computing",
-            "DevOps",
-            "API Design"
-        ],
+For the role:
 
-        "Machine Learning Engineer": [
-            "Python",
-            "Machine Learning",
-            "Deep Learning",
-            "TensorFlow",
-            "PyTorch",
-            "Statistics",
-            "Data Structures",
-            "Cloud Computing"
-        ],
+{role}
 
-        "Data Scientist": [
-            "Python",
-            "SQL",
-            "Statistics",
-            "Machine Learning",
-            "Data Visualization",
-            "Pandas",
-            "NumPy"
-        ],
+Generate required skills.
 
-        "Frontend Developer": [
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "React",
-            "Responsive Design",
-            "Git"
-        ],
+Return ONLY JSON.
 
-        "Backend Developer": [
-            "Python",
-            "FastAPI",
-            "Flask",
-            "SQL",
-            "REST API",
-            "Git"
-        ],
+{{
+    "required_skills": []
+}}
+"""
 
-        "Full Stack Developer": [
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "React",
-            "Python",
-            "SQL",
-            "Git"
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
         ]
-    }
+    )
+
+    result = response.choices[0].message.content
+
+    try:
+
+        result = result.replace(
+            "```json",
+            ""
+        )
+
+        result = result.replace(
+            "```",
+            ""
+        )
+
+        match = re.search(
+            r'\{.*\}',
+            result,
+            re.DOTALL
+        )
+
+        if match:
+            return json.loads(
+                match.group()
+            )
+
+    except:
+        pass
 
     return {
-        "required_skills": roles.get(role, [])
+        "required_skills": []
     }

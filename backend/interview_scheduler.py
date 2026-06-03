@@ -1,59 +1,90 @@
-def generate_interview_plan(recommendation, score):
+import json
+import re
 
-    if recommendation == "Strong Hire":
+from groq_client import client
 
-        return {
-            "rounds": [
-                "Technical Round",
-                "Managerial Round",
-                "HR Round"
-            ],
-            "slots": [
-                "Tomorrow - 10:00 AM",
-                "Tomorrow - 2:00 PM",
-                "Next Working Day - 11:00 AM"
-            ],
-            "difficulty": "Advanced",
-            "duration": "60 Minutes"
-        }
 
-    elif recommendation == "Hire":
+def generate_interview_plan(
+    role,
+    recommendation,
+    matching_skills,
+    missing_skills
+):
 
-        return {
-            "rounds": [
-                "Technical Round",
-                "HR Round"
-            ],
-            "slots": [
-                "Within 3 Days - 10:00 AM",
-                "Within 3 Days - 2:00 PM"
-            ],
-            "difficulty": "Intermediate",
-            "duration": "45 Minutes"
-        }
+    prompt = f"""
+You are a senior technical interviewer.
 
-    elif recommendation == "Borderline":
+Create a personalized interview strategy.
 
-        return {
-            "rounds": [
-                "Skill Assessment",
-                "Technical Round"
-            ],
-            "slots": [
-                "Next Week - Monday 10:00 AM",
-                "Next Week - Tuesday 11:00 AM"
-            ],
-            "difficulty": "Intermediate",
-            "duration": "45 Minutes"
-        }
+Role:
+{role}
 
-    else:
+Recommendation:
+{recommendation}
 
-        return {
-            "rounds": [],
-            "slots": [],
-            "difficulty": "N/A",
-            "duration": "N/A",
-            "message":
-                "Candidate requires additional upskilling before interview scheduling."
-        }
+Matching Skills:
+{matching_skills}
+
+Missing Skills:
+{missing_skills}
+
+Return ONLY JSON.
+
+{{
+    "difficulty": "",
+    "duration": "",
+    "rounds": [],
+    "focus_areas": [],
+    "strategy": ""
+}}
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.5
+    )
+
+    result = response.choices[0].message.content
+
+    try:
+
+        result = result.replace(
+            "```json",
+            ""
+        )
+
+        result = result.replace(
+            "```",
+            ""
+        )
+
+        match = re.search(
+            r'\{.*\}',
+            result,
+            re.DOTALL
+        )
+
+        if match:
+            return json.loads(
+                match.group()
+            )
+
+    except Exception as e:
+        print(
+            "Interview Agent Error:",
+            e
+        )
+
+    return {
+        "difficulty": "Medium",
+        "duration": "45 Minutes",
+        "rounds": [],
+        "focus_areas": [],
+        "strategy": ""
+    }

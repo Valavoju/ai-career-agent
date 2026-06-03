@@ -83,8 +83,11 @@ async def analyze_resume(
     # Hiring Recommendation Agent
 
     recommendation = get_hiring_recommendation(
-        result["match_score"]
-    )
+        result["match_score"],
+        result["matching_skills"],
+        result["missing_skills"],
+        role
+)
 
     # Candidate Communication Agent
 
@@ -96,9 +99,11 @@ async def analyze_resume(
     # Interview Scheduling Agent
 
     interview_plan = generate_interview_plan(
+        role,
         recommendation["recommendation"],
-        result["match_score"]
-    )
+        result["matching_skills"],
+        result["missing_skills"]
+)
 
     return {
 
@@ -114,6 +119,12 @@ async def analyze_resume(
 
         "resume_skills":
             resume_analysis["skills"],
+
+        "candidate_strengths":
+            resume_analysis["strengths"],
+
+        "recommended_role":
+            resume_analysis["recommended_role"],
 
         "required_skills":
             role_analysis["required_skills"],
@@ -146,6 +157,15 @@ async def analyze_resume(
 
         "interview_plan":
             interview_plan,
+
+        "risk_level":
+            recommendation["risk_level"],
+
+        "assessment":
+             recommendation["assessment"],
+
+        "recommended_action":
+            recommendation["action"],
 
         # Career Roadmap
 
