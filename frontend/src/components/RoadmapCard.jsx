@@ -64,27 +64,24 @@ function RoadmapCard({ roadmap }) {
                     {topic.resources &&
                       topic.resources.length > 0 && (
 
-                        <div>
+                       <div className="resource-section">
 
-                          <strong>
-                            🔗 Learning Resources:
-                          </strong>
+  <strong>
+    🔗 Learning Resources:
+  </strong>
 
-                          <ul>
+  {topic.resources.map((resource, index) => (
 
-                            {topic.resources.map(
-                              (resource, index) => (
+    <p
+      key={index}
+      className="resource-item"
+    >
+      • {resource}
+    </p>
 
-                                <li key={index}>
-                                  {resource}
-                                </li>
+  ))}
 
-                              )
-                            )}
-
-                          </ul>
-
-                        </div>
+</div>
 
                       )}
 

@@ -863,3 +863,12 @@ INTERVIEW AGENT
     grid-template-columns: 1fr;
   }
 }
+
+.resource-section {
+  margin-top: 10px;
+}
+
+.resource-item {
+  margin: 5px 0;
+  text-align: center;
+}
