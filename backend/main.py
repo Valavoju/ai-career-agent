@@ -72,10 +72,21 @@ async def analyze_resume(
     # Resume Analysis
 
     resume_analysis = extract_skills(resume_text)
+    print("\n")
+    print("========== RESUME ANALYSIS ==========")
+    print(resume_analysis)
+    print("=====================================")
+    print("\n")
 
     # Get role requirements
 
     role_analysis = get_role_requirements(role)
+
+    print("\n")
+    print("========== ROLE ANALYSIS ==========")
+    print(role_analysis)
+    print("===================================")
+    print("\n")
 
     print("ROLE ANALYSIS =", role_analysis)
     print("FIRST SKILL TYPE =", type(role_analysis["required_skills"][0]) if role_analysis["required_skills"] else "EMPTY")
@@ -86,6 +97,7 @@ async def analyze_resume(
         resume_analysis["skills"],
         role_analysis["required_skills"]
     )
+    
 
     # Learning Roadmap
 
