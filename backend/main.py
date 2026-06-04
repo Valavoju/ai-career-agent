@@ -135,6 +135,7 @@ async def analyze_resume(
     print("\n")
     print("========== ROADMAP ==========")
     print(roadmap)
+    print(type(roadmap))
     print("=============================")
     print("\n")
 
