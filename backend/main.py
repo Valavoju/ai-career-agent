@@ -77,6 +77,9 @@ async def analyze_resume(
 
     role_analysis = get_role_requirements(role)
 
+    print("ROLE ANALYSIS =", role_analysis)
+    print("REQUIRED SKILLS =", role_analysis["required_skills"])
+
     # ATS Matching
 
     result = calculate_match(
