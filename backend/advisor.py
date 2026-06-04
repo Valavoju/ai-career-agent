@@ -12,16 +12,45 @@ def get_hiring_recommendation(
     resume_text
 ):
 
+    # ------------------------
+    # Rule-Based Decision
+    # ------------------------
+
+    if score >= 85:
+
+        recommendation = "Strong Hire"
+        confidence = 95
+        risk = "Low"
+
+    elif score >= 70:
+
+        recommendation = "Hire"
+        confidence = 85
+        risk = "Low"
+
+    elif score >= 50:
+
+        recommendation = "Borderline"
+        confidence = 70
+        risk = "Medium"
+
+    else:
+
+        recommendation = "Not Recommended"
+        confidence = 50
+        risk = "High"
+
+    # ------------------------
+    # AI Assessment Generator
+    # ------------------------
+
     prompt = f"""
 You are a senior technical recruiter.
 
-Analyze the candidate profile.
+Generate a short assessment.
 
-Target Role:
+Role:
 {role}
-
-Resume:
-{resume_text}
 
 ATS Score:
 {score}
@@ -32,79 +61,92 @@ Matching Skills:
 Missing Skills:
 {missing_skills}
 
-Return ONLY valid JSON.
+Recommendation:
+{recommendation}
+
+Return ONLY JSON.
 
 {{
-    "recommendation": "",
-    "confidence_percentage": 0,
-    "risk_level": "",
     "assessment": "",
     "action": ""
 }}
-Rules:
-
-- confidence_percentage must be an integer between 0 and 100.
-- recommendation must be one of:
-  Strong Hire
-  Hire
-  Borderline
-  Not Recommended
 """
-
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0
-    )
-
-    result = response.choices[0].message.content.strip()
 
     try:
 
-        result = result.replace(
-            "```json",
-            ""
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            temperature=0,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
         )
 
-        result = result.replace(
-            "```",
-            ""
-        )
+        result = response.choices[0].message.content.strip()
+
+        result = result.replace("```json", "")
+        result = result.replace("```", "")
 
         match = re.search(
-            r'\{.*\}',
+            r"\{.*\}",
             result,
             re.DOTALL
         )
 
         if match:
-            return json.loads(
+
+            ai_response = json.loads(
                 match.group()
             )
 
+            return {
+
+                "recommendation":
+                    recommendation,
+
+                "confidence_percentage":
+                    confidence,
+
+                "risk_level":
+                    risk,
+
+                "assessment":
+                    ai_response.get(
+                        "assessment",
+                        ""
+                    ),
+
+                "action":
+                    ai_response.get(
+                        "action",
+                        ""
+                    )
+            }
+
     except Exception as e:
+
         print(
             "Hiring Agent Error:",
             e
         )
 
     return {
-        "recommendation":
-            "Borderline",
 
-         "confidence_percentage": 70,
+        "recommendation":
+            recommendation,
+
+        "confidence_percentage":
+            confidence,
 
         "risk_level":
-            "Medium",
+            risk,
 
         "assessment":
-            "Unable to generate assessment.",
+            f"Candidate matched {len(matching_skills)} skills and missed {len(missing_skills)} skills.",
 
         "action":
-            "Manual review recommended."
+            "Further review recommended."
     }
