@@ -32,16 +32,22 @@ IMPORTANT:
 
 1. Return ONLY valid JSON.
 2. Do NOT return markdown.
-3. rounds MUST contain at least 3 interview rounds.
-4. focus_areas MUST contain ONLY 4-6 HIGH LEVEL topics.
+3. rounds MUST contain at least 4 interview rounds.
+4. Every round MUST contain:
+   - round_name
+   - duration
+   - description
+   - questions
+
+5. focus_areas MUST contain ONLY 4-6 HIGH LEVEL topics.
 
 GOOD:
 [
- "TensorFlow",
+ "Machine Learning",
  "Deep Learning",
  "Computer Vision",
  "Cloud Computing",
- "DevOps"
+ "AI Engineering"
 ]
 
 BAD:
@@ -52,37 +58,39 @@ BAD:
  "NumPy",
  "Pandas",
  "Matplotlib",
- "Seaborn",
- "AWS",
- "Azure"
+ "Seaborn"
 ]
 
 Return JSON exactly like:
 
 {{
   "difficulty": "Medium",
-  "duration": "60 Minutes",
+  "duration": "60-90 minutes",
 
   "rounds": [
     {{
-      "round_name": "Introduction and Background",
-      "duration": "15 minutes"
+      "round_name": "Introduction and Icebreaker",
+      "duration": "10 minutes",
+      "description": "Brief introduction of the candidate.",
+      "questions": [
+        "Tell us about yourself."
+      ]
     }},
     {{
       "round_name": "Technical Skills Assessment",
-      "duration": "30 minutes"
-    }},
-    {{
-      "round_name": "System Design and Problem Solving",
-      "duration": "15 minutes"
+      "duration": "30 minutes",
+      "description": "Evaluate technical knowledge.",
+      "questions": [
+        "Explain machine learning."
+      ]
     }}
   ],
 
   "focus_areas": [
-    "AI Engineering",
     "Machine Learning",
     "Deep Learning",
-    "Cloud Computing"
+    "Computer Vision",
+    "AI Engineering"
   ],
 
   "strategy": ""
@@ -108,7 +116,7 @@ Return JSON exactly like:
         result = result.replace("```", "")
 
         match = re.search(
-            r'\{.*\}',
+            r"\{.*\}",
             result,
             re.DOTALL
         )
@@ -117,38 +125,142 @@ Return JSON exactly like:
 
             data = json.loads(match.group())
 
+            # Limit focus areas
             if len(data.get("focus_areas", [])) > 6:
-                 data["focus_areas"] = data["focus_areas"][:6]
+                data["focus_areas"] = data["focus_areas"][:6]
 
-            if not data.get("rounds"):
+            # Normalize rounds
+            cleaned_rounds = []
+
+            for round_item in data.get("rounds", []):
+
+                cleaned_rounds.append({
+
+                    "round_name":
+                        round_item.get(
+                            "round_name",
+                            round_item.get(
+                                "round",
+                                round_item.get(
+                                    "name",
+                                    "Interview Round"
+                                )
+                            )
+                        ),
+
+                    "duration":
+                        round_item.get(
+                            "duration",
+                            round_item.get(
+                                "estimated_time",
+                                round_item.get(
+                                    "time",
+                                    "15 minutes"
+                                )
+                            )
+                        ),
+
+                    "description":
+                        round_item.get(
+                            "description",
+                            ""
+                        ),
+
+                    "questions":
+                        round_item.get(
+                            "questions",
+                            []
+                        )
+
+                })
+
+            data["rounds"] = cleaned_rounds
+
+            # Fallback rounds
+            if not data["rounds"]:
+
                 data["rounds"] = [
+
                     {
                         "round_name":
-                        "Introduction and Background",
+                        "Introduction and Icebreaker",
+
                         "duration":
-                        "15 minutes"
+                        "10 minutes",
+
+                        "description":
+                        "Brief introduction of the candidate followed by an icebreaker question.",
+
+                        "questions": [
+                            "Tell us about yourself."
+                        ]
                     },
+
                     {
                         "round_name":
                         "Technical Skills Assessment",
+
                         "duration":
-                        "30 minutes"
+                        "30 minutes",
+
+                        "description":
+                        "Evaluate technical knowledge related to the target role.",
+
+                        "questions": [
+                            "Explain a project you worked on."
+                        ]
                     },
+
                     {
                         "round_name":
-                        "System Design and Problem Solving",
+                        "Behavioral Questions",
+
                         "duration":
-                        "15 minutes"
+                        "20 minutes",
+
+                        "description":
+                        "Assess communication, teamwork and adaptability.",
+
+                        "questions": [
+                            "Describe a challenging situation."
+                        ]
+                    },
+
+                    {
+                        "round_name":
+                        "Project Discussion",
+
+                        "duration":
+                        "20 minutes",
+
+                        "description":
+                        "Discuss practical implementation and project experience.",
+
+                        "questions": [
+                            "Walk us through your project."
+                        ]
                     }
+
                 ]
 
+            # Fallback focus areas
             if not data.get("focus_areas"):
+
                 data["focus_areas"] = [
                     "AI Engineering",
                     "Machine Learning",
                     "Deep Learning",
-                    "Cloud Computing"
+                    "Computer Vision"
                 ]
+
+            # Fallback strategy
+            if not data.get("strategy"):
+
+                data["strategy"] = (
+                    "Evaluate the candidate on technical knowledge, "
+                    "problem-solving ability, practical implementation "
+                    "experience, communication skills and project exposure."
+                )
 
             return data
 
@@ -160,37 +272,83 @@ Return JSON exactly like:
         )
 
     return {
+
         "difficulty": "Medium",
-        "duration": "60 Minutes",
+
+        "duration": "60-90 minutes",
 
         "rounds": [
+
             {
                 "round_name":
-                "Introduction and Background",
+                "Introduction and Icebreaker",
+
                 "duration":
-                "15 minutes"
+                "10 minutes",
+
+                "description":
+                "Brief introduction of the candidate followed by an icebreaker question.",
+
+                "questions": [
+                    "Tell us about yourself."
+                ]
             },
+
             {
                 "round_name":
                 "Technical Skills Assessment",
+
                 "duration":
-                "30 minutes"
+                "30 minutes",
+
+                "description":
+                "Evaluate technical knowledge related to the target role.",
+
+                "questions": [
+                    "Explain a project you worked on."
+                ]
             },
+
             {
                 "round_name":
-                "System Design and Problem Solving",
+                "Behavioral Questions",
+
                 "duration":
-                "15 minutes"
+                "20 minutes",
+
+                "description":
+                "Assess communication, teamwork and adaptability.",
+
+                "questions": [
+                    "Describe a challenging situation."
+                ]
+            },
+
+            {
+                "round_name":
+                "Project Discussion",
+
+                "duration":
+                "20 minutes",
+
+                "description":
+                "Discuss practical implementation and project experience.",
+
+                "questions": [
+                    "Walk us through your project."
+                ]
             }
+
         ],
 
         "focus_areas": [
             "AI Engineering",
             "Machine Learning",
             "Deep Learning",
-            "Cloud Computing"
+            "Computer Vision"
         ],
 
         "strategy":
-        "Candidate will be assessed on technical knowledge, problem solving and practical implementation skills."
+        "Evaluate the candidate on technical knowledge, problem-solving ability, practical implementation experience, communication skills and project exposure."
+
     }
