@@ -1,15 +1,13 @@
 function RoadmapCard({ roadmap }) {
 
-  console.log("ROADMAP DATA =", roadmap);
-
-  if (!roadmap) return null;
+  if (!roadmap) {
+    return null;
+  }
 
   return (
     <div className="dashboard-card">
 
-      <h2>
-        🧠 AI Learning Roadmap
-      </h2>
+      <h2>🧠 AI Learning Roadmap</h2>
 
       <div className="roadmap-header">
 
@@ -27,7 +25,7 @@ function RoadmapCard({ roadmap }) {
 
       {roadmap.roadmap &&
         Object.entries(roadmap.roadmap).map(
-          ([phaseName, topics], phaseIndex) => (
+          ([phaseName, phaseData], phaseIndex) => (
 
             <div
               className="phase-card"
@@ -38,56 +36,79 @@ function RoadmapCard({ roadmap }) {
                 🚀 {phaseName}
               </h3>
 
-              {Array.isArray(topics) &&
-                topics.map((topic, topicIndex) => (
+              <div className="skills-grid">
 
-                  <div
-                    key={topicIndex}
-                    className="roadmap-topic"
-                  >
+                {Array.isArray(phaseData) &&
+                  phaseData.map((item, index) => (
 
-                    <h4>
-                      📚 {topic.skill}
-                    </h4>
+                    <div
+                      key={index}
+                      className="roadmap-skill-card"
+                    >
 
-                    <p>
-                      {topic.description}
-                    </p>
+                      <h4>
+                        📚 {item.topic}
+                      </h4>
 
-                    <p>
-                      <strong>
-                        ⏳ Estimated Time:
-                      </strong>{" "}
-                      {topic.estimated_time}
-                    </p>
+                      <p>
+                        ⏳ {item["estimated time"]}
+                      </p>
 
-                    {topic.resources &&
-                      topic.resources.length > 0 && (
+                      {item.subtopics && (
 
-                       <div className="resource-section">
+                        <>
+                          <h5>Topics Covered</h5>
 
-  <strong>
-    🔗 Learning Resources:
-  </strong>
+                          <div className="subtopic-grid">
 
-  {topic.resources.map((resource, index) => (
+                            {item.subtopics.map(
+                              (subtopic, i) => (
 
-    <p
-      key={index}
-      className="resource-item"
-    >
-      • {resource}
-    </p>
+                                <span
+                                  key={i}
+                                  className="skill-chip"
+                                >
+                                  ✅ {subtopic}
+                                </span>
 
-  ))}
+                              )
+                            )}
 
-</div>
+                          </div>
+                        </>
 
                       )}
 
-                  </div>
+                      {item["learning resources"] && (
 
-                ))}
+                        <>
+                          <h5>Learning Resources</h5>
+
+                          <div className="resource-grid">
+
+                            {item["learning resources"].map(
+                              (resource, i) => (
+
+                                <div
+                                  key={i}
+                                  className="resource-chip"
+                                >
+                                  🔗 {resource}
+                                </div>
+
+                              )
+                            )}
+
+                          </div>
+                        </>
+
+                      )}
+
+                    </div>
+
+                  ))}
+
+              </div>
 
             </div>
 
@@ -97,7 +118,7 @@ function RoadmapCard({ roadmap }) {
       <div className="career-outcome">
 
         <h3>
-          🎯 Expected Outcome
+          🎯 Career Outcome
         </h3>
 
         <p>

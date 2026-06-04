@@ -120,9 +120,22 @@ function App() {
       );
       setResult(response.data);
 
-      console.log(response.data);
-      console.log("ROADMAP =", response.data.roadmap);
-      console.log(response.data.interview_plan);
+console.log("FULL RESPONSE =", response.data);
+
+console.log(
+  "ROADMAP DATA =",
+  response.data.roadmap
+);
+
+console.log(
+  "ROADMAP INNER =",
+  response.data.roadmap?.roadmap
+);
+
+console.log(
+  "INTERVIEW PLAN =",
+  response.data.interview_plan
+);
 
       if (response.data.candidate_email) {
         sendEmail(response.data);

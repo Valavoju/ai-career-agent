@@ -41,32 +41,60 @@ function InterviewCard({ plan }) {
 
             <div className="rounds-grid">
 
-              {plan.rounds.map(
-                (round, index) => (
+              {plan.rounds.map((round, index) => (
 
-                  <div
-                    key={index}
-                    className="round-card"
-                  >
+                <div
+                  key={index}
+                  className="round-card"
+                >
 
-                    <h4>
-                      🎯 {round.round}
-                    </h4>
+                 <h4 className="round-title">
+  🎯 {round.round_name || round.round_type || "Interview Round"}
+</h4>
 
-                    <p>
-                      <strong>
-                        ⏳ Duration:
-                      </strong>{" "}
-                      {round.duration}
-                    </p>
+<p className="round-duration">
+  ⏳ {round.duration || "N/A"}
+</p>
 
-                    <p>
-                      {round.description}
-                    </p>
+<p className="round-description">
+  {round.round_type}
+</p>
 
-                  </div>
-                )
-              )}
+                </div>
+
+              ))}
+
+            </div>
+          </>
+        )}
+
+      {Array.isArray(plan.focus_areas) &&
+        plan.focus_areas.length > 0 && (
+          <>
+            <h3>
+              🎯 Focus Areas
+            </h3>
+
+            <div className="focus-grid">
+
+              {plan.focus_areas.map((area, index) => (
+
+                <div
+                  key={index}
+                  className="focus-card"
+                >
+
+                  <h4>
+                    📚 {area.area}
+                  </h4>
+
+                  <p>
+                    {area.description}
+                  </p>
+
+                </div>
+
+              ))}
 
             </div>
           </>
@@ -81,29 +109,37 @@ function InterviewCard({ plan }) {
 
             <div className="slots-grid">
 
-              {plan.slots.map(
-                (slot, index) => (
+              {plan.slots.map((slot, index) => (
 
-                  <div
-                    key={index}
-                    className="slot-card"
-                  >
-                    {typeof slot === "object"
-                      ? JSON.stringify(slot)
-                      : slot}
-                  </div>
+                <div
+                  key={index}
+                  className="slot-card"
+                >
+                  {typeof slot === "object"
+                    ? JSON.stringify(slot)
+                    : slot}
+                </div>
 
-                )
-              )}
+              ))}
 
             </div>
           </>
         )}
 
-      {plan.message && (
-        <div className="interview-message">
-          <p>{plan.message}</p>
+      {plan.strategy && (
+
+        <div className="career-outcome">
+
+          <h3>
+            🎯 Interview Strategy
+          </h3>
+
+          <p>
+            {plan.strategy}
+          </p>
+
         </div>
+
       )}
 
     </div>
