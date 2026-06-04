@@ -78,7 +78,7 @@ async def analyze_resume(
     role_analysis = get_role_requirements(role)
 
     print("ROLE ANALYSIS =", role_analysis)
-    print("REQUIRED SKILLS =", role_analysis["required_skills"])
+    print("FIRST SKILL TYPE =", type(role_analysis["required_skills"][0]) if role_analysis["required_skills"] else "EMPTY")
 
     # ATS Matching
 
