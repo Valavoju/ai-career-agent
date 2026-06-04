@@ -18,7 +18,7 @@ from resume_intelligence_agent import (
 from skill_extractor import extract_skills
 from role_analyzer import get_role_requirements
 from matcher import calculate_match
-from roadmap import generate_roadmap
+
 from advisor import get_hiring_recommendation
 
 # NEW AGENTS
@@ -127,17 +127,7 @@ async def analyze_resume(
 
     # Learning Roadmap
 
-    roadmap = generate_roadmap(
-        role,
-        result["missing_skills"]
-    )
-
-    print("\n")
-    print("========== ROADMAP ==========")
-    print(roadmap)
-    print(type(roadmap))
-    print("=============================")
-    print("\n")
+   
 
     # Hiring Recommendation Agent
 
@@ -233,7 +223,4 @@ async def analyze_resume(
             candidate_intelligence,
 
         # Career Roadmap
-
-        "roadmap":
-            roadmap
     }

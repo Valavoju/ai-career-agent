@@ -246,7 +246,7 @@ console.log(
                   color="red"
                 />
 
-                <RoadmapCard roadmap={result.roadmap} />
+               
               </>
             )}
 
