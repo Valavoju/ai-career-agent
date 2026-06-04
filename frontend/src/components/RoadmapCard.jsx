@@ -25,42 +25,77 @@ function RoadmapCard({ roadmap }) {
 
       </div>
 
-      {Object.entries(roadmap.roadmap).map(
-        ([phaseName, topics], phaseIndex) => (
+      {roadmap.roadmap &&
+        Object.entries(roadmap.roadmap).map(
+          ([phaseName, topics], phaseIndex) => (
 
-          <div
-            className="phase-card"
-            key={phaseIndex}
-          >
+            <div
+              className="phase-card"
+              key={phaseIndex}
+            >
 
-            <h3>
-              🚀 {phaseName}
-            </h3>
+              <h3>
+                🚀 {phaseName}
+              </h3>
 
-            {Object.entries(topics).map(
-  ([skillName, skillData], topicIndex) => (
+              {Array.isArray(topics) &&
+                topics.map((topic, topicIndex) => (
 
-              <div
-                key={topicIndex}
-                className="roadmap-topic"
-              >
+                  <div
+                    key={topicIndex}
+                    className="roadmap-topic"
+                  >
 
-                <h4>
-  {skillName}
-</h4>
+                    <h4>
+                      📚 {topic.skill}
+                    </h4>
 
-<pre>
-  {JSON.stringify(skillData, null, 2)}
-</pre>
+                    <p>
+                      {topic.description}
+                    </p>
 
-              </div>
+                    <p>
+                      <strong>
+                        ⏳ Estimated Time:
+                      </strong>{" "}
+                      {topic.estimated_time}
+                    </p>
 
-            ))}
+                    {topic.resources &&
+                      topic.resources.length > 0 && (
 
-          </div>
+                        <div>
 
-        )
-      )}
+                          <strong>
+                            🔗 Learning Resources:
+                          </strong>
+
+                          <ul>
+
+                            {topic.resources.map(
+                              (resource, index) => (
+
+                                <li key={index}>
+                                  {resource}
+                                </li>
+
+                              )
+                            )}
+
+                          </ul>
+
+                        </div>
+
+                      )}
+
+                  </div>
+
+                ))}
+
+            </div>
+
+          )
+        )}
 
       <div className="career-outcome">
 
