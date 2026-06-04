@@ -1,5 +1,7 @@
 function RoadmapCard({ roadmap }) {
 
+  console.log("ROADMAP DATA =", roadmap);
+
   if (!roadmap) return null;
 
   return (
@@ -23,71 +25,42 @@ function RoadmapCard({ roadmap }) {
 
       </div>
 
-      <div className="phase-card">
+      {Object.entries(roadmap.roadmap).map(
+        ([phaseName, topics], phaseIndex) => (
 
-        <h3>
-          🚀 Phase 1
-        </h3>
+          <div
+            className="phase-card"
+            key={phaseIndex}
+          >
 
-        <p>
-          Duration: {roadmap.roadmap.phase1.duration}
-        </p>
+            <h3>
+              🚀 {phaseName}
+            </h3>
 
-        <ul>
-          {roadmap.roadmap.phase1.tasks.map(
-            (task, index) => (
-              <li key={index}>
-                {task.title}
-              </li>
-            )
-          )}
-        </ul>
+            {Object.entries(topics).map(
+  ([skillName, skillData], topicIndex) => (
 
-      </div>
+              <div
+                key={topicIndex}
+                className="roadmap-topic"
+              >
 
-      <div className="phase-card">
+                <h4>
+  {skillName}
+</h4>
 
-        <h3>
-          🚀 Phase 2
-        </h3>
+<pre>
+  {JSON.stringify(skillData, null, 2)}
+</pre>
 
-        <p>
-          Duration: {roadmap.roadmap.phase2.duration}
-        </p>
+              </div>
 
-        <ul>
-          {roadmap.roadmap.phase2.tasks.map(
-            (task, index) => (
-              <li key={index}>
-                {task.title}
-              </li>
-            )
-          )}
-        </ul>
+            ))}
 
-      </div>
+          </div>
 
-      <div className="phase-card">
-
-        <h3>
-          🚀 Phase 3
-        </h3>
-
-        <p>
-          Duration: {roadmap.roadmap.phase3.duration}
-        </p>
-
-        <ul>
-          {roadmap.roadmap.phase3.tasks.map(
-            (task, index) => (
-              <li key={index}>
-                {task.title}
-              </li>
-            )
-          )}
-        </ul>
-
-      </div>
+        )
+      )}
 
       <div className="career-outcome">
 
