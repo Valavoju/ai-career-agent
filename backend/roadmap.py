@@ -101,17 +101,16 @@ Return ONLY JSON.
 
     result = response.choices[0].message.content
 
+    print("\n==============================")
+    print("RAW ROADMAP RESPONSE")
+    print("==============================")
+    print(result)
+    print("==============================\n")
+
     try:
 
-        result = result.replace(
-            "```json",
-            ""
-        )
-
-        result = result.replace(
-            "```",
-            ""
-        )
+        result = result.replace("```json", "")
+        result = result.replace("```", "")
 
         match = re.search(
             r"\{.*\}",
@@ -119,126 +118,154 @@ Return ONLY JSON.
             re.DOTALL
         )
 
-        if match:
+        if not match:
+            raise Exception("No JSON found")
 
-            data = json.loads(
-                match.group()
-            )
+        data = json.loads(match.group())
 
-            # -------------------------
-            # Convert old roadmap format
-            # -------------------------
+        # --------------------------------------------------
+        # Safety checks for roadmap
+        # --------------------------------------------------
 
-            if isinstance(
-                data.get("roadmap"),
-                list
-            ):
+        roadmap_data = data.get("roadmap")
 
-                fixed_roadmap = {}
+        if roadmap_data is None:
+            roadmap_data = {}
 
-                for phase in data["roadmap"]:
+        if isinstance(roadmap_data, str):
+            roadmap_data = {}
 
-                    phase_name = phase.get(
-                        "phase",
-                        "Learning Phase"
-                    )
+        if isinstance(roadmap_data, list):
 
-                    skills_data = []
+            fixed_roadmap = {}
 
-                    for skill in phase.get(
-                        "skills",
-                        []
-                    ):
+            for phase in roadmap_data:
 
-                        skills_data.append({
+                phase_name = phase.get(
+                    "phase",
+                    "Learning Phase"
+                )
 
-                            "skill":
-                            skill,
+                skills_data = []
 
-                            "description":
-                            f"Learn {skill} thoroughly with practical projects and hands-on exercises.",
-
-                            "estimated_time":
-                            "1-2 weeks",
-
-                            "resources":
-                            []
-
-                        })
-
-                    fixed_roadmap[
-                        phase_name
-                    ] = skills_data
-
-                data["roadmap"] = fixed_roadmap
-
-            # -------------------------
-            # Normalize roadmap
-            # -------------------------
-
-            for phase_name, phase_data in data.get(
-                "roadmap",
-                {}
-            ).items():
-
-                if not isinstance(
-                    phase_data,
-                    list
+                for skill in phase.get(
+                    "skills",
+                    []
                 ):
-                    data["roadmap"][
-                        phase_name
-                    ] = []
-                    continue
 
-                cleaned = []
-
-                for item in phase_data:
-
-                    cleaned.append({
+                    skills_data.append({
 
                         "skill":
-                        item.get(
-                            "skill",
-                            item.get(
-                                "Skill",
-                                ""
-                            )
-                        ),
+                        skill,
 
                         "description":
-                        item.get(
-                            "description",
-                            item.get(
-                                "Description",
-                                ""
-                            )
-                        ),
+                        f"Learn {skill} thoroughly with practical projects and hands-on exercises.",
 
                         "estimated_time":
-                        item.get(
-                            "estimated_time",
-                            item.get(
-                                "Estimated Time",
-                                ""
-                            )
-                        ),
+                        "1-2 weeks",
 
                         "resources":
-                        item.get(
-                            "resources",
-                            item.get(
-                                "Resources",
-                                []
-                            )
-                        )
+                        []
 
                     })
 
-                data["roadmap"][
+                fixed_roadmap[
                     phase_name
-                ] = cleaned
+                ] = skills_data
 
-            return data
+            roadmap_data = fixed_roadmap
+
+        if not isinstance(
+            roadmap_data,
+            dict
+        ):
+            roadmap_data = {}
+
+        data["roadmap"] = roadmap_data
+
+        # --------------------------------------------------
+        # Normalize roadmap structure
+        # --------------------------------------------------
+
+        for phase_name, phase_data in roadmap_data.items():
+
+            if not isinstance(
+                phase_data,
+                list
+            ):
+                roadmap_data[
+                    phase_name
+                ] = []
+                continue
+
+            cleaned = []
+
+            for item in phase_data:
+
+                if not isinstance(
+                    item,
+                    dict
+                ):
+                    continue
+
+                cleaned.append({
+
+                    "skill":
+                    item.get(
+                        "skill",
+                        item.get(
+                            "Skill",
+                            ""
+                        )
+                    ),
+
+                    "description":
+                    item.get(
+                        "description",
+                        item.get(
+                            "Description",
+                            ""
+                        )
+                    ),
+
+                    "estimated_time":
+                    item.get(
+                        "estimated_time",
+                        item.get(
+                            "Estimated Time",
+                            ""
+                        )
+                    ),
+
+                    "resources":
+                    item.get(
+                        "resources",
+                        item.get(
+                            "Resources",
+                            []
+                        )
+                    )
+
+                })
+
+            roadmap_data[
+                phase_name
+            ] = cleaned
+
+        data["roadmap"] = roadmap_data
+
+        if not data.get("readiness"):
+            data["readiness"] = "Beginner"
+
+        if not data.get("estimated_time"):
+            data["estimated_time"] = "6-12 months"
+
+        if not data.get("expected_outcome"):
+            data["expected_outcome"] = (
+                "Become job-ready for the selected role."
+            )
+
+        return data
 
     except Exception as e:
 
