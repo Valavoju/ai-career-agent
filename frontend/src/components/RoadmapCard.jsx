@@ -38,8 +38,16 @@ function RoadmapCard({ roadmap }) {
 
               <div className="skills-grid">
 
-                {Array.isArray(phaseData) &&
-                  phaseData.map((item, index) => (
+                {(
+  Array.isArray(phaseData)
+    ? phaseData
+    : (phaseData?.Skills || []).map((skill) => ({
+        skill,
+        estimated_time: "",
+        resources:
+          phaseData["Recommended Courses"] || []
+      }))
+).map((item, index) => (
 
                     <div
                       key={index}
