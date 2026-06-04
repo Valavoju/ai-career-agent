@@ -97,7 +97,11 @@ async def analyze_resume(
         resume_analysis["skills"],
         role_analysis["required_skills"]
     )
-    
+    print("\n")
+    print("========== ATS RESULT ==========")
+    print(result)
+    print("================================")
+    print("\n")
 
     # Learning Roadmap
 
