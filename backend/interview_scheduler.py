@@ -33,7 +33,29 @@ IMPORTANT:
 1. Return ONLY valid JSON.
 2. Do NOT return markdown.
 3. rounds MUST contain at least 3 interview rounds.
-4. focus_areas MUST contain at least 4 items.
+4. focus_areas MUST contain ONLY 4-6 HIGH LEVEL topics.
+
+GOOD:
+[
+ "TensorFlow",
+ "Deep Learning",
+ "Computer Vision",
+ "Cloud Computing",
+ "DevOps"
+]
+
+BAD:
+[
+ "TensorFlow",
+ "Keras",
+ "PyTorch",
+ "NumPy",
+ "Pandas",
+ "Matplotlib",
+ "Seaborn",
+ "AWS",
+ "Azure"
+]
 
 Return JSON exactly like:
 
@@ -94,6 +116,9 @@ Return JSON exactly like:
         if match:
 
             data = json.loads(match.group())
+
+            if len(data.get("focus_areas", [])) > 6:
+                 data["focus_areas"] = data["focus_areas"][:6]
 
             if not data.get("rounds"):
                 data["rounds"] = [
