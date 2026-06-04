@@ -1181,3 +1181,23 @@ align-items:center;
   transform: translateY(-2px);
   background: #bfdbfe;
 }
+.focus-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.focus-card {
+  background: #eef7ff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.focus-card:hover {
+  transform: translateY(-3px);
+}

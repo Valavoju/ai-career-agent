@@ -41,28 +41,68 @@ function InterviewCard({ plan }) {
 
             <div className="rounds-grid">
 
-              {plan.rounds.map((round, index) => (
+              {plan.rounds.map((round, index) => {
 
-                <div
-                  key={index}
-                  className="round-card"
-                >
+                console.log("ROUND =", round);
 
-                 <h4 className="round-title">
-  🎯 {round.round_name || round.round_type || "Interview Round"}
-</h4>
+                const roundName =
+                  round.round_name ||
+                  round.round_type ||
+                  round.title ||
+                  round.name ||
+                  round.round ||
+                  "Interview Round";
 
-<p className="round-duration">
-  ⏳ {round.duration || "N/A"}
-</p>
+                const roundDuration =
+                  round.duration ||
+                  round.estimated_time ||
+                  round.time ||
+                  round.duration_minutes ||
+                  round["Duration"] ||
+                  round["Estimated Time"] ||
+                  "N/A";
 
-<p className="round-description">
-  {round.round_type}
-</p>
+                const roundDescription =
+  round.description ||
+  round.round_type ||
+  round.details ||
+  (
+    round.questions &&
+    round.questions.length > 0
+      ? (
+          typeof round.questions[0] === "object"
+            ? round.questions[0].question
+            : round.questions[0]
+        )
+      : ""
+  );
 
-                </div>
+                return (
 
-              ))}
+                  <div
+                    key={index}
+                    className="round-card"
+                  >
+
+                    <h4 className="round-title">
+                      🎯 {roundName}
+                    </h4>
+
+                    <p className="round-duration">
+                      ⏳ {roundDuration}
+                    </p>
+
+                    {roundDescription && (
+                      <p className="round-description">
+                        {roundDescription}
+                      </p>
+                    )}
+
+                  </div>
+
+                );
+
+              })}
 
             </div>
           </>
@@ -85,12 +125,17 @@ function InterviewCard({ plan }) {
                 >
 
                   <h4>
-                    📚 {area.area}
+                    📚 {typeof area === "object"
+                      ? area.area
+                      : area}
                   </h4>
 
-                  <p>
-                    {area.description}
-                  </p>
+                  {typeof area === "object" &&
+                    area.weight && (
+                      <p>
+                        Priority: {area.weight}
+                      </p>
+                    )}
 
                 </div>
 

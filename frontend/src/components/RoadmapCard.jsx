@@ -47,62 +47,46 @@ function RoadmapCard({ roadmap }) {
                     >
 
                       <h4>
-                        📚 {item.topic}
+                        📚 {item.skill || item.Skill}
                       </h4>
 
+                      {(item.description ||
+                        item.Description) && (
+                        <p>
+                          {item.description ||
+                            item.Description}
+                        </p>
+                      )}
+
                       <p>
-                        ⏳ {item["estimated time"]}
+                        ⏳ {
+                          item.estimated_time ||
+                          item["Estimated Time"]
+                        }
                       </p>
 
-                      {item.subtopics && (
+                      <div className="resource-grid">
 
-                        <>
-                          <h5>Topics Covered</h5>
+                        {(item.resources ||
+                          item.Resources ||
+                          item["Learning Resources"] ||
+                          []).map(
+                            (
+                              resource,
+                              resourceIndex
+                            ) => (
 
-                          <div className="subtopic-grid">
+                              <div
+                                key={resourceIndex}
+                                className="resource-chip"
+                              >
+                                🔗 {resource}
+                              </div>
 
-                            {item.subtopics.map(
-                              (subtopic, i) => (
+                            )
+                          )}
 
-                                <span
-                                  key={i}
-                                  className="skill-chip"
-                                >
-                                  ✅ {subtopic}
-                                </span>
-
-                              )
-                            )}
-
-                          </div>
-                        </>
-
-                      )}
-
-                      {item["learning resources"] && (
-
-                        <>
-                          <h5>Learning Resources</h5>
-
-                          <div className="resource-grid">
-
-                            {item["learning resources"].map(
-                              (resource, i) => (
-
-                                <div
-                                  key={i}
-                                  className="resource-chip"
-                                >
-                                  🔗 {resource}
-                                </div>
-
-                              )
-                            )}
-
-                          </div>
-                        </>
-
-                      )}
+                      </div>
 
                     </div>
 
