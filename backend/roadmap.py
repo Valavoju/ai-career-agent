@@ -10,23 +10,42 @@ def generate_roadmap(
 ):
 
     prompt = f"""
-You are an AI Career Mentor.
+Create a roadmap for:
 
-Create a professional learning roadmap.
-
-Target Role:
+Role:
 {role}
 
 Missing Skills:
 {missing_skills}
 
-Return ONLY JSON.
+Return ONLY JSON in this exact format:
 
 {{
-    "readiness": "",
-    "estimated_time": "",
-    "roadmap": "",
-    "expected_outcome": ""
+  "readiness": "",
+  "estimated_time": "",
+
+  "roadmap": {{
+
+    "Phase 1": [
+      {{
+        "skill": "",
+        "description": "",
+        "estimated_time": "",
+        "resources": []
+      }}
+    ],
+
+    "Phase 2": [
+      {{
+        "skill": "",
+        "description": "",
+        "estimated_time": "",
+        "resources": []
+      }}
+    ]
+  }},
+
+  "expected_outcome": ""
 }}
 """
 

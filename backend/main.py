@@ -1,5 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+
+from pdf_generator import generate_pdf
+
 
 from resume_parser import (
     extract_text,
@@ -37,6 +41,24 @@ def health():
     return {
         "status": "alive"
     }
+
+# PDF DOWNLOAD ROUTE
+@app.post("/download-report")
+async def download_report(data: dict):
+
+    pdf_path = "AI_Career_Report.pdf"
+
+    generate_pdf(
+        data,
+        pdf_path
+    )
+
+    return FileResponse(
+        path=pdf_path,
+        filename="AI_Career_Report.pdf",
+        media_type="application/pdf"
+    )
+
 
 
 @app.post("/analyze")
@@ -109,6 +131,12 @@ async def analyze_resume(
         role,
         result["missing_skills"]
     )
+
+    print("\n")
+    print("========== ROADMAP ==========")
+    print(roadmap)
+    print("=============================")
+    print("\n")
 
     # Hiring Recommendation Agent
 
